@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+    <h1>Dashboard</h1>
+    <p>Positions for the current week</p>
+
+    <h4>Open Positions</h4>
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="col-1">Instrument</th>
+                <th class="col-2">Open At</th>
+                <th class="col-2">Type</th>
+                <th class="col-4">Profit</th>
+                <th class="col-5">Risk</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for instrument, position in openPositions %}
+                <tr>
+                    <td>{{ instrument }}</td>
+                    <td>{{ position.open_at }}</td>
+                    <td>{{ position.order }}</td>
+                    <td>{{ position.floating_PnL }}</td>
+                    <td>{{ position.risk }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+    <h4>Closed Positions</h4>
+    <div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="col-1">Instrument</th>
+                <th class="col-2">Open At</th>
+                <th class="col-3">Type</th>
+                <th class="col-4">Closed At</th>
+                <th class="col-5">Profit</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for instrument, position in closedPositions %}
+                <tr>
+                    <td>{{ instrument }}</td>
+                    <td>{{ position.open_at }}</td>
+                    <td>{{ position.order }}</td>
+                    <td>{{ position.closed_at }}</td>
+                    <td>{{ position.profit }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
