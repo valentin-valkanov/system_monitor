@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="{{ asset('assets/styles/app.css') }}">
     {% endblock %}
     {% block javascripts %}
-        {{ importmap('app') }}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
 </head>
 <body>
