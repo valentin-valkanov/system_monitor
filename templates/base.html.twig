@@ -7,9 +7,11 @@
     {% block stylesheets %}
         <link rel="stylesheet" href="{{ asset('assets/styles/app.css') }}">
     {% endblock %}
+
     {% block javascripts %}
         {% block importmap %}{{ importmap('app') }}{% endblock %}
     {% endblock %}
+
 </head>
 <body>
 {% block body %}{% endblock %}
