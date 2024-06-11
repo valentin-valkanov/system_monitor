@@ -1,3 +1,14 @@
-body {
-    background-color: skyblue;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.fixed-width-1 { width: 20%; }
+.fixed-width-2 { width: 20%; }
+.fixed-width-3 { width: 20%; }
+.fixed-width-4 { width: 20%; }
+.fixed-width-5 { width: 20%; }
+
+.page-header {
+    background-color: #DAF7A6 ; /* Set your desired background color */
+    padding: 20px; /* Add some padding to create space around the text */
 }

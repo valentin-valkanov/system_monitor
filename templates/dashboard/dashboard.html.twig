@@ -6,58 +6,62 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
-    <h1>Dashboard</h1>
-    <p>Positions for the current week</p>
+    <div class="mx-9">
+    <div class="text-center page-header">
+        <h1 class="text-3xl">Dashboard</h1>
+        <p class="mb-4">Positions for the current week. Portfolio heat. Returns.</p>
+    </div>
 
-    <h4>Open Positions</h4>
-    <div>
-        <table class="table">
-            <thead>
+    <h4 class="text-2xl font-semibold mb-2">Open Positions</h4>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead class="bg-gray-50">
             <tr>
-                <th class="col-1">Instrument</th>
-                <th class="col-2">Open At</th>
-                <th class="col-2">Type</th>
-                <th class="col-4">Profit</th>
-                <th class="col-5">Risk</th>
+                <th class="py-2 px-4 border-b fixed-width-1 border-r text-center">Instrument</th>
+                <th class="py-2 px-4 border-b fixed-width-1 border-r text-center">Open At</th>
+                <th class="py-2 px-4 border-b fixed-width-1 border-r text-center">Type</th>
+                <th class="py-2 px-4 border-b fixed-width-1 border-r text-center">Profit</th>
+                <th class="py-2 px-4 border-b fixed-width-1 text-center">Risk</th>
             </tr>
             </thead>
             <tbody>
             {% for instrument, position in openPositions %}
-                <tr>
-                    <td>{{ instrument }}</td>
-                    <td>{{ position.open_at }}</td>
-                    <td>{{ position.order }}</td>
-                    <td>{{ position.floating_PnL }}</td>
-                    <td>{{ position.risk }}</td>
+                <tr class="border-b hover:bg-gray-100">
+                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ instrument }}</td>
+                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ position.open_at }}</td>
+                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ position.order }}</td>
+                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ position.floating_PnL }}</td>
+                    <td class="py-2 px-4 fixed-width-1 text-center">{{ position.risk }}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-
     </div>
-    <h4>Closed Positions</h4>
-    <div>
-        <table class="table">
-            <thead>
+
+    <h4 class="text-2xl font-semibold mt-8 mb-2">Closed Positions</h4>
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead class="bg-gray-50">
             <tr>
-                <th class="col-1">Instrument</th>
-                <th class="col-2">Open At</th>
-                <th class="col-3">Type</th>
-                <th class="col-4">Closed At</th>
-                <th class="col-5">Profit</th>
+                <th class="py-2 px-4 border-b border-r fixed-width-1 text-center">Instrument</th>
+                <th class="py-2 px-4 border-b border-r fixed-width-1 text-center">Open At</th>
+                <th class="py-2 px-4 border-b border-r fixed-width-1 text-center">Type</th>
+                <th class="py-2 px-4 border-b border-r fixed-width-1 text-center">Closed At</th>
+                <th class="py-2 px-4 border-b fixed-width-1 text-center">Profit</th>
             </tr>
             </thead>
             <tbody>
             {% for instrument, position in closedPositions %}
-                <tr>
-                    <td>{{ instrument }}</td>
-                    <td>{{ position.open_at }}</td>
-                    <td>{{ position.order }}</td>
-                    <td>{{ position.closed_at }}</td>
-                    <td>{{ position.profit }}</td>
+                <tr class="border-b hover:bg-gray-100">
+                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ instrument }}</td>
+                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ position.open_at }}</td>
+                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ position.order }}</td>
+                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ position.closed_at }}</td>
+                    <td class="py-2 px-4 fixed-width-1 text-center">{{ position.profit }}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+    </div>
     </div>
 {% endblock %}
