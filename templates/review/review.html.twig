@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reviews{% endblock %}
+
+{% block body %}
+    <div class="text-center page-header">
+        <h1 class="text-3xl">Reviews</h1>
+        <p class="mb-4">Feedback on trading for the respective week</p>
+    </div>
+
+    <div class="text-left bg-white p-4 rounded-md shadow-md mt-8">
+        {% for title, body in reviewEntries %}
+            <div class="mb-4">
+                <h2 class="text-2xl font-bold">{{ title }}</h2>
+                <p>{{ body }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
