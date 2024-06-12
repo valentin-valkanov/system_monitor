@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PositionController extends AbstractController
 {
-    #[Route('position/show', name: 'app_closed_position_show_all')]
+    #[Route('brokerId/show', name: 'app_closed_position_show_all')]
     public function showAllPositions(): Response
     {
         $positions = [
