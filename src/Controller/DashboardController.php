@@ -33,7 +33,7 @@ class DashboardController extends AbstractController
         ]);
     }
 
-    #[Route('brokerId/add', name: 'app_position_add')]
+    #[Route('position/add', name: 'app_position_add')]
     public function addPosition(Request $request, EntityManagerInterface $entityManager): Response
     {
         $position = new Position();
@@ -49,6 +49,8 @@ class DashboardController extends AbstractController
             $positionState->setPosition($position);
             $entityManager->persist($positionState);
             $entityManager->flush();
+
+            return $this->redirectToRoute('app_closed_position_show_all');
         }
 
         return $this->render('position/add_position.html.twig', [
