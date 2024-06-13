@@ -2,13 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
-.fixed-width-1 { width: 20%; }
-.fixed-width-2 { width: 20%; }
-.fixed-width-3 { width: 20%; }
-.fixed-width-4 { width: 20%; }
-.fixed-width-5 { width: 20%; }
-
 .page-header {
-    background-color: #DAF7A6 ; /* Set your desired background color */
+    background-color: #DAF7A6; /* Set your desired background color */
     padding: 20px; /* Add some padding to create space around the text */
+}
+
+.table-container {
+    overflow-x: auto;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+}
+
+.table {
+    min-width: 100%;
+    background-color: white;
+    border: 1px solid #e2e8f0;
+}
+
+.table thead {
+    background-color: #f8fafc;
+}
+
+.table th,
+.table td {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+    text-align: center;
+    font-size: 0.875rem;
+}
+
+.table th:last-child,
+.table td:last-child {
+    border-right: none;
+}
+
+/* Define column widths */
+.width-2-5 { width: 2.5%; }
+.width-10 { width: 10%; }
+.width-6 { width: 6%; }
+.width-3-5 { width: 3.5%; }
+.width-4 { width: 4%; }
+
+/* Ensure fixed table layout */
+.table {
+    table-layout: fixed;
 }

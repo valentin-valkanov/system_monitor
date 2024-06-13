@@ -12,26 +12,53 @@
         <p class="mb-4">List of all closed positions</p>
     </div>
     <div class="text-center">
-
-        <div class="overflow-x-auto bg-white p-4 rounded-md shadow-md mt-8">
-            <table class="min-w-full bg-white border border-gray-200">
-                <thead class="bg-gray-50">
+        <div class="table-container">
+            <table class="table">
+                <thead>
                 <tr>
-                    <th class="py-2 px-4 border-b">Instrument</th>
-                    <th class="py-2 px-4 border-b">Open At</th>
-                    <th class="py-2 px-4 border-b">Order</th>
-                    <th class="py-2 px-4 border-b">Closed At</th>
-                    <th class="py-2 px-4 border-b">Profit</th>
+                    <th class="width-2-5">ID</th>
+                    <th class="width-10">Entry Time</th>
+                    <th class="width-6">Broker ID</th>
+                    <th class="width-6">Symbol</th>
+                    <th class="width-3-5">Type</th>
+                    <th class="width-3-5">Vol</th>
+                    <th class="width-6">Entry</th>
+                    <th class="width-6">Stop Loss</th>
+                    <th class="width-6">Take Profit</th>
+                    <th class="width-10">Exit Time</th>
+                    <th class="width-6">Exit</th>
+                    <th class="width-4">Comm</th>
+                    <th class="width-4">Swap</th>
+                    <th class="width-6">Profit</th>
+                    <th class="width-3-5">System</th>
+                    <th class="width-6">Strategy</th>
+                    <th class="width-6">Asset Class</th>
+                    <th class="width-3-5">Grade</th>
+                    <th class="width-3-5">Div</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% for instrument, details in positions %}
-                    <tr class="border-b">
-                        <td class="py-2 px-4">{{ instrument }}</td>
-                        <td class="py-2 px-4">{{ details.open_at }}</td>
-                        <td class="py-2 px-4">{{ details.order }}</td>
-                        <td class="py-2 px-4">{{ details.closed_at }}</td>
-                        <td class="py-2 px-4">{{ details.profit }}</td>
+                {% for position in positions %}
+                    <tr>
+                        <td>{{ position.id }}</td>
+                        <td>{{ position.entryTime|date('Y-m-d H:i:s') }}</td>
+                        <td>{{ position.brokerID }}</td>
+                        <td>{{ position.symbol }}</td>
+                        <td>{{ position.type }}</td>
+                        <td>{{ position.volume }}</td>
+                        <td>{{ position.entry }}</td>
+                        <td>{{ position.stopLoss }}</td>
+                        <td>{{ position.takeProfit }}</td>
+                        <td>{{ position.exitTime|date('Y-m-d H:i:s') }}</td>
+                        <td>{{ position.exit }}</td>
+                        <td>{{ position.commission }}</td>
+                        <td>{{ position.swap }}</td>
+                        <td>{{ position.profit }}</td>
+                        <td>{{ position.system }}</td>
+                        <td>{{ position.strategy }}</td>
+                        <td>{{ position.assetClass }}</td>
+                        <td>{{ position.grade }}</td>
+                        <td>{{ position.dividend }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
