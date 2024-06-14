@@ -20,6 +20,7 @@
     min-width: 100%;
     background-color: white;
     border: 1px solid #e2e8f0;
+    table-layout: fixed; /* Ensure fixed table layout */
 }
 
 .table thead {
@@ -41,13 +42,5 @@
 }
 
 /* Define column widths */
-.width-2-5 { width: 2.5%; }
-.width-10 { width: 10%; }
-.width-6 { width: 6%; }
-.width-3-5 { width: 3.5%; }
-.width-4 { width: 4%; }
-
-/* Ensure fixed table layout */
-.table {
-    table-layout: fixed;
-}
+.entry-time-column { width: 15%; }
+.exit-time-column { width: 15%; }
