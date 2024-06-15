@@ -7,7 +7,7 @@
         <h1 class="text-3xl">Add Position</h1>
     </div>
 
-    <div class="text-left bg-white p-4 rounded-md shadow-md mt-8">
+    <div class="text-left bg-white p-4 rounded-md shadow-md mt-8" style="max-width: 600px; margin: auto;">
         {{ form_start(form) }}
         {{ form_row(form.entryTime) }}
         {{ form_row(form.brokerId) }}
@@ -27,7 +27,8 @@
         {{ form_row(form.assetClass) }}
         {{ form_row(form.grade) }}
         {{ form_row(form.dividend) }}
-        <button type="submit" class="btn btn-primary">Add Position</button>
+        <button type="submit" class="btn btn-primary">Save</button>
         {{ form_end(form) }}
     </div>
+
 {% endblock %}

@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/table_styles.css') }}">
 {% endblock %}
 
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
-{#    <div class="mx-1">#}
     <div class="text-center page-header">
         <h1 class="text-3xl">Dashboard</h1>
         <p class="mb-4">Positions for the current week. Portfolio heat. Returns.</p>
@@ -16,56 +16,123 @@
         <a href="{{ path('app_position_add') }}" class="btn btn-primary">Add Position</a>
     </div>
 
-    <h4 class="text-2xl font-semibold mb-2">Open Positions</h4>
-    <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border border-gray-200">
-            <thead class="bg-gray-50">
-            <tr>
-                <th class="py-2 px-4 border-b fixed-width-1 border-r text-center">Instrument</th>
-                <th class="py-2 px-4 border-b fixed-width-1 border-r text-center">Open At</th>
-                <th class="py-2 px-4 border-b fixed-width-1 border-r text-center">Type</th>
-                <th class="py-2 px-4 border-b fixed-width-1 border-r text-center">Profit</th>
-                <th class="py-2 px-4 border-b fixed-width-1 text-center">Risk</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for instrument, position in openPositions %}
-                <tr class="border-b hover:bg-gray-100">
-                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ instrument }}</td>
-                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ position.open_at }}</td>
-                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ position.order }}</td>
-                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ position.floating_PnL }}</td>
-                    <td class="py-2 px-4 fixed-width-1 text-center">{{ position.risk }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="overflow-x-auto">
+            <div class="table-container">
+                <h4 class="text-2xl font-semibold mb-2">Closed Positions</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Entry Time</th>
+                            <th>Broker ID</th>
+                            <th>Symbol</th>
+                            <th>Type</th>
+                            <th>Vol</th>
+                            <th>Entry</th>
+                            <th>Stop Loss</th>
+                            <th>Take Profit</th>
+                            <th>Exit Time</th>
+                            <th>Exit</th>
+                            <th>Comm</th>
+                            <th>Swap</th>
+                            <th>Profit</th>
+                            <th>System</th>
+                            <th>Strategy</th>
+                            <th>Asset Class</th>
+                            <th>Grade</th>
+                            <th>Div</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                <tbody>
+                    {% for position in closedPositions %}
+                        <tr>
+                            <td>{{ position.entryTime|date('Y-m-d H:i:s') }}</td>
+                            <td>{{ position.brokerID }}</td>
+                            <td>{{ position.symbol }}</td>
+                            <td>{{ position.type }}</td>
+                            <td>{{ position.volume }}</td>
+                            <td>{{ position.entry }}</td>
+                            <td>{{ position.stopLoss }}</td>
+                            <td>{{ position.takeProfit }}</td>
+                            <td>{{ position.exitTime|date('Y-m-d H:i:s') }}</td>
+                            <td>{{ position.exit }}</td>
+                            <td>{{ position.commission }}</td>
+                            <td>{{ position.swap }}</td>
+                            <td>{{ position.profit }}</td>
+                            <td>{{ position.system }}</td>
+                            <td>{{ position.strategy }}</td>
+                            <td>{{ position.assetClass }}</td>
+                            <td>{{ position.grade }}</td>
+                            <td>{{ position.dividend }}</td>
+                            <td>
+                                <form action="{{ path('app_position_delete', {'id': position.id}) }}" method="post">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <h4 class="text-2xl font-semibold mt-8 mb-2">Closed Positions</h4>
-    <div class="overflow-x-auto">
-        <table class="min-w-full bg-white border border-gray-200">
-            <thead class="bg-gray-50">
-            <tr>
-                <th class="py-2 px-4 border-b border-r fixed-width-1 text-center">Instrument</th>
-                <th class="py-2 px-4 border-b border-r fixed-width-1 text-center">Open At</th>
-                <th class="py-2 px-4 border-b border-r fixed-width-1 text-center">Type</th>
-                <th class="py-2 px-4 border-b border-r fixed-width-1 text-center">Closed At</th>
-                <th class="py-2 px-4 border-b fixed-width-1 text-center">Profit</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for instrument, position in closedPositions %}
-                <tr class="border-b hover:bg-gray-100">
-                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ instrument }}</td>
-                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ position.open_at }}</td>
-                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ position.order }}</td>
-                    <td class="py-2 px-4 border-r fixed-width-1 text-center">{{ position.closed_at }}</td>
-                    <td class="py-2 px-4 fixed-width-1 text-center">{{ position.profit }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        <div class="overflow-x-auto">
+            <div class="table-container">
+                <h4 class="text-2xl font-semibold mt-8 mb-2">Open Positions</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Entry Time</th>
+                                <th>Broker ID</th>
+                                <th>Symbol</th>
+                                <th>Type</th>
+                                <th>Vol</th>
+                                <th>Entry</th>
+                                <th>Stop Loss</th>
+                                <th>Take Profit</th>
+                                <th>Exit Time</th>
+                                <th>Exit</th>
+                                <th>Comm</th>
+                                <th>Swap</th>
+                                <th>Profit</th>
+                                <th>System</th>
+                                <th>Strategy</th>
+                                <th>Asset Class</th>
+                                <th>Grade</th>
+                                <th>Div</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                {% for position in openPositions %}
+                    <tr>
+                        <td>{{ position.entryTime|date('Y-m-d H:i:s') }}</td>
+                        <td>{{ position.brokerID }}</td>
+                        <td>{{ position.symbol }}</td>
+                        <td>{{ position.type }}</td>
+                        <td>{{ position.volume }}</td>
+                        <td>{{ position.entry }}</td>
+                        <td>{{ position.stopLoss }}</td>
+                        <td>{{ position.takeProfit }}</td>
+                        <td>{{ position.exitTime|date('Y-m-d H:i:s') }}</td>
+                        <td>{{ position.exit }}</td>
+                        <td>{{ position.commission }}</td>
+                        <td>{{ position.swap }}</td>
+                        <td>{{ position.profit }}</td>
+                        <td>{{ position.system }}</td>
+                        <td>{{ position.strategy }}</td>
+                        <td>{{ position.assetClass }}</td>
+                        <td>{{ position.grade }}</td>
+                        <td>{{ position.dividend }}</td>
+                        <td>
+                            <form action="{{ path('app_position_delete', {'id': position.id}) }}" method="post">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-{#    </div>#}
 {% endblock %}

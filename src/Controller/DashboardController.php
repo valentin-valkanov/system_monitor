@@ -6,6 +6,8 @@ use App\Entity\Position;
 use App\Entity\PositionState;
 use App\Form\PositionStateType;
 use App\Form\PositionType;
+use App\Repository\PositionRepository;
+use App\Repository\PositionStateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,18 +16,19 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class DashboardController extends AbstractController
 {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private PositionStateRepository $positionStateRepository
+    )
+    {
+    }
+
     #[Route('/', name: 'app_dashboard')]
     public function showWeeklyPositions(): Response
     {
-        $openPositions = [
-            'EURUSD' => ['open_at' => 1.0910, 'order' => 'buy', 'floating_PnL' => 238.05, 'risk' => 185.30],
-            'AUDUSD' => ['open_at' => 0.6675, 'order' => 'buy', 'floating_PnL' => -120.85, 'risk'=> 435.00]
-            ];
+        $openPositions = $this->positionStateRepository->findOpenPositions();
+        $closedPositions = $this->positionStateRepository->findClosedPositionsForCurrentWeek();
 
-        $closedPositions = [
-            'GOLD' => ['open_at' => 2330.00, 'order' => 'buy', 'closed_at' => 2450.25, 'profit' => 380.30],
-            'SP500' => ['open_at' => 5300.00, 'order' => 'buy', 'closed_at' => 5428.01, 'profit' => 483.55]
-        ];
 
         return $this->render('dashboard/dashboard.html.twig', [
             'openPositions' => $openPositions,
@@ -34,21 +37,21 @@ class DashboardController extends AbstractController
     }
 
     #[Route('position/add', name: 'app_position_add')]
-    public function addPosition(Request $request, EntityManagerInterface $entityManager): Response
+    public function addPosition(Request $request): Response
     {
-        $position = new Position();
         $positionState = new PositionState();
+        $position = new Position($positionState);
         $form = $this->createForm(PositionStateType::class, $positionState);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $entityManager->persist($position);
-            $entityManager->flush();
+            $this->entityManager->persist($position);
+            $this->entityManager->flush();
 
             $positionState->setPosition($position);
-            $entityManager->persist($positionState);
-            $entityManager->flush();
+            $this->entityManager->persist($positionState);
+            $this->entityManager->flush();
 
             return $this->redirectToRoute('app_closed_position_show_all');
         }
@@ -56,5 +59,33 @@ class DashboardController extends AbstractController
         return $this->render('position/add_position.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    public function editPosition(Request $request, Position $position): Response
+    {
+        $positionState = new PositionState();
+        $form = $this->createForm(PositionStateType::class, $positionState);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $this->entityManager->persist($position);
+            $this->entityManager->flush();
+
+            $positionState->setPosition($position);
+            $this->entityManager->persist($positionState);
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('app_closed_position_show_all');
+        }
+
+        $position->addPositionState($positionState);
+
+        // Persist the PositionState and Position
+        $this->entityManager->persist($positionState);
+        $this->entityManager->flush();
+
+        // Redirect or return a response
+        return $this->redirectToRoute('app_dashboard');
     }
 }

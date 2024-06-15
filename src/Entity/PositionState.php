@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\PositionStateRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PositionStateRepository::class)]
@@ -68,7 +67,7 @@ class PositionState
     #[ORM\Column]
     private ?float $dividend = null;
 
-    #[ORM\ManyToOne(targetEntity: Position::class)]
+    #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'positionStates')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Position $position = null;
 

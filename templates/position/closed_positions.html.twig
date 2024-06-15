@@ -4,6 +4,7 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/table_styles.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -11,58 +12,63 @@
         <h1 class="text-3xl">Positions</h1>
         <p class="mb-4">List of all closed positions</p>
     </div>
-    <div class="text-center">
-        <div class="table-container">
-            <table class="table">
-                <thead>
+
+    <div class="overflow-x-auto">
+    <div class="table-container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th class="entry-time-column">Entry Time</th>
+                <th class="width-6">Broker ID</th>
+                <th class="width-6">Symbol</th>
+                <th class="width-3">Type</th>
+                <th class="width-3">Vol</th>
+                <th class="width-6">Entry</th>
+                <th class="width-6">Stop Loss</th>
+                <th class="width-6">Take Profit</th>
+                <th class="exit-time-column">Exit Time</th>
+                <th class="width-6">Exit</th>
+                <th class="width-3">Comm</th>
+                <th class="width-3">Swap</th>
+                <th class="width-6">Profit</th>
+                <th class="width-3">System</th>
+                <th class="width-6">Strategy</th>
+                <th class="width-6">Asset Class</th>
+                <th class="width-3">Grade</th>
+                <th class="width-3">Div</th>
+                <th class="width-3">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for position in positions %}
                 <tr>
-                    <th class="width-2-5">ID</th>
-                    <th class="entry-time-column">Entry Time</th>
-                    <th class="width-6">Broker ID</th>
-                    <th class="width-6">Symbol</th>
-                    <th class="width-3">Type</th>
-                    <th class="width-3">Vol</th>
-                    <th class="width-6">Entry</th>
-                    <th class="width-6">Stop Loss</th>
-                    <th class="width-6">Take Profit</th>
-                    <th class="exit-time-column">Exit Time</th>
-                    <th class="width-6">Exit</th>
-                    <th class="width-3">Comm</th>
-                    <th class="width-3">Swap</th>
-                    <th class="width-6">Profit</th>
-                    <th class="width-3">System</th>
-                    <th class="width-6">Strategy</th>
-                    <th class="width-6">Asset Class</th>
-                    <th class="width-3">Grade</th>
-                    <th class="width-3">Div</th>
+                    <td>{{ position.entryTime|date('Y-m-d H:i:s') }}</td>
+                    <td>{{ position.brokerID }}</td>
+                    <td>{{ position.symbol }}</td>
+                    <td>{{ position.type }}</td>
+                    <td>{{ position.volume }}</td>
+                    <td>{{ position.entry }}</td>
+                    <td>{{ position.stopLoss }}</td>
+                    <td>{{ position.takeProfit }}</td>
+                    <td>{{ position.exitTime|date('Y-m-d H:i:s') }}</td>
+                    <td>{{ position.exit }}</td>
+                    <td>{{ position.commission }}</td>
+                    <td>{{ position.swap }}</td>
+                    <td>{{ position.profit }}</td>
+                    <td>{{ position.system }}</td>
+                    <td>{{ position.strategy }}</td>
+                    <td>{{ position.assetClass }}</td>
+                    <td>{{ position.grade }}</td>
+                    <td>{{ position.dividend }}</td>
+                    <td>
+                        <form action="{{ path('app_position_delete', {'id': position.id}) }}" method="post">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
                 </tr>
-                </thead>
-                <tbody>
-                {% for position in positions %}
-                    <tr>
-                        <td>{{ position.id }}</td>
-                        <td>{{ position.entryTime|date('Y-m-d H:i:s') }}</td>
-                        <td>{{ position.brokerID }}</td>
-                        <td>{{ position.symbol }}</td>
-                        <td>{{ position.type }}</td>
-                        <td>{{ position.volume }}</td>
-                        <td>{{ position.entry }}</td>
-                        <td>{{ position.stopLoss }}</td>
-                        <td>{{ position.takeProfit }}</td>
-                        <td>{{ position.exitTime|date('Y-m-d H:i:s') }}</td>
-                        <td>{{ position.exit }}</td>
-                        <td>{{ position.commission }}</td>
-                        <td>{{ position.swap }}</td>
-                        <td>{{ position.profit }}</td>
-                        <td>{{ position.system }}</td>
-                        <td>{{ position.strategy }}</td>
-                        <td>{{ position.assetClass }}</td>
-                        <td>{{ position.grade }}</td>
-                        <td>{{ position.dividend }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
     </div>
 {% endblock %}
