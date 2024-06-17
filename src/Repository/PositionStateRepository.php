@@ -17,7 +17,14 @@ class PositionStateRepository extends ServiceEntityRepository
     public function findOpenPositions(): array
     {
         return $this->createQueryBuilder('ps')
+            ->select('ps')
+            ->innerJoin('ps.position', 'p')
             ->where('ps.exitTime IS NULL')
+            ->andWhere('ps.id IN (
+                SELECT MAX(ps2.id)
+                FROM App\Entity\PositionState ps2
+                GROUP BY ps2.position
+            )')
             ->getQuery()
             ->getResult();
     }

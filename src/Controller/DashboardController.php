@@ -61,6 +61,16 @@ class DashboardController extends AbstractController
         ]);
     }
 
+    #[Route('position/delete{id}', name: 'app_position_delete')]
+    public function deletePosition(Request $request, Position $position): Response
+    {
+        $this->entityManager->remove($position);
+        $this->entityManager->flush();
+
+        return $this->redirectToRoute('app_dashboard');
+    }
+
+    #[Route('position/edit{id}', name: 'app_position_edit')]
     public function editPosition(Request $request, Position $position): Response
     {
         $positionState = new PositionState();
@@ -68,24 +78,24 @@ class DashboardController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $position->addPositionState($positionState);
 
-            $this->entityManager->persist($position);
-            $this->entityManager->flush();
+            $this->entityManager->beginTransaction();
+            try{
+                $this->entityManager->persist($positionState);
+                $this->entityManager->flush();
+                $this->entityManager->commit();
 
-            $positionState->setPosition($position);
-            $this->entityManager->persist($positionState);
-            $this->entityManager->flush();
-
-            return $this->redirectToRoute('app_closed_position_show_all');
+                return $this->redirectToRoute('app_dashboard');
+            }catch (\Exception $exception){
+                $this->entityManager->rollback();
+                throw $exception;
+            }
         }
-
-        $position->addPositionState($positionState);
-
-        // Persist the PositionState and Position
-        $this->entityManager->persist($positionState);
-        $this->entityManager->flush();
-
-        // Redirect or return a response
-        return $this->redirectToRoute('app_dashboard');
+// Render the form if it's not submitted or not valid
+        return $this->render('position/edit_position.html.twig', [
+            'form' => $form->createView(),
+            'position' => $position,
+        ]);
     }
 }

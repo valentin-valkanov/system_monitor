@@ -65,6 +65,7 @@
                             <td>{{ position.grade }}</td>
                             <td>{{ position.dividend }}</td>
                             <td>
+                                <a href="{{ path('app_position_edit', {'id': position.id}) }}" class="btn btn-primary btn-sm">Edit</a>
                                 <form action="{{ path('app_position_delete', {'id': position.id}) }}" method="post">
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
@@ -125,6 +126,7 @@
                         <td>{{ position.grade }}</td>
                         <td>{{ position.dividend }}</td>
                         <td>
+                            <a href="{{ path('app_position_edit', {'id': position.id}) }}" class="btn btn-primary btn-sm">Edit</a>
                             <form action="{{ path('app_position_delete', {'id': position.id}) }}" method="post">
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
