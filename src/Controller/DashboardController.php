@@ -36,7 +36,7 @@ class DashboardController extends AbstractController
         ]);
     }
 
-    #[Route('position/add', name: 'app_position_add')]
+    #[Route('/position/add', name: 'app_position_add')]
     public function addPosition(Request $request): Response
     {
         $positionState = new PositionState();
@@ -61,41 +61,56 @@ class DashboardController extends AbstractController
         ]);
     }
 
-    #[Route('position/delete{id}', name: 'app_position_delete')]
-    public function deletePosition(Request $request, Position $position): Response
+    #[Route('/position/delete/{positionStateId}', name: 'app_position_delete')]
+    public function deletePosition(Request $request, int $positionStateId): Response
     {
+        $positionState = $this->entityManager->getRepository(PositionState::class)->find($positionStateId);
+
+        if (!$positionState) {
+            throw $this->createNotFoundException('PositionState not found.');
+        }
+
+        $position = $positionState->getPosition($positionStateId);
+
+        if(!$position){
+            throw $this->createNotFoundException('Position not found');
+        }
         $this->entityManager->remove($position);
         $this->entityManager->flush();
 
         return $this->redirectToRoute('app_dashboard');
     }
 
-    #[Route('position/edit{id}', name: 'app_position_edit')]
-    public function editPosition(Request $request, Position $position): Response
+    #[Route('/position/edit/{positionStateId}', name: 'app_position_edit')]
+    public function editPosition(Request $request, int $positionStateId): Response
     {
-        $positionState = new PositionState();
-        $form = $this->createForm(PositionStateType::class, $positionState);
+        $positionState = $this->entityManager->getRepository(PositionState::class)->find($positionStateId);
+
+        if (!$positionState) {
+            throw $this->createNotFoundException('PositionState not found.');
+        }
+
+        $position = $positionState->getPosition($positionStateId);
+
+
+        if(!$position){
+            throw $this->createNotFoundException('Position not found');
+        }
+
+        $newPositionState = new PositionState();
+        $form = $this->createForm(PositionStateType::class, $newPositionState);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $position->addPositionState($positionState);
-
-            $this->entityManager->beginTransaction();
-            try{
-                $this->entityManager->persist($positionState);
-                $this->entityManager->flush();
-                $this->entityManager->commit();
-
-                return $this->redirectToRoute('app_dashboard');
-            }catch (\Exception $exception){
-                $this->entityManager->rollback();
-                throw $exception;
-            }
+        if($form->isSubmitted() && $form->isValid()){
+            $position->addPositionState($newPositionState);
+            $this->entityManager->persist($newPositionState);
+            $this->entityManager->flush();
+            return $this->redirectToRoute('app_dashboard');
         }
-// Render the form if it's not submitted or not valid
+
         return $this->render('position/edit_position.html.twig', [
             'form' => $form->createView(),
-            'position' => $position,
         ]);
+
     }
 }
