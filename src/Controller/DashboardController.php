@@ -5,8 +5,6 @@ namespace App\Controller;
 use App\Entity\Position;
 use App\Entity\PositionState;
 use App\Form\PositionStateType;
-use App\Form\PositionType;
-use App\Repository\PositionRepository;
 use App\Repository\PositionStateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -98,6 +96,25 @@ class DashboardController extends AbstractController
         }
 
         $newPositionState = new PositionState();
+        $newPositionState->setEntryTime($positionState->getEntryTime());
+        $newPositionState->setBrokerId($positionState->getBrokerID());
+        $newPositionState->setSymbol($positionState->getSymbol());
+        $newPositionState->setType($positionState->getType());
+        $newPositionState->setVolume($positionState->getVolume());
+        $newPositionState->setEntry($positionState->getEntry());
+        $newPositionState->setStopLoss($positionState->getStopLoss());
+        $newPositionState->setTakeProfit($positionState->getTakeProfit());
+        $newPositionState->setExitTime($positionState->getExitTime());
+        $newPositionState->setExit($positionState->getExit());
+        $newPositionState->setCommission($positionState->getCommission());
+        $newPositionState->setSwap($positionState->getSwap());
+        $newPositionState->setProfit($positionState->getProfit());
+        $newPositionState->setSystem($positionState->getSystem());
+        $newPositionState->setStrategy($positionState->getStrategy());
+        $newPositionState->setAssetClass($positionState->getAssetClass());
+        $newPositionState->setGrade($positionState->getGrade());
+        $newPositionState->setDividend($positionState->getDividend());
+
         $form = $this->createForm(PositionStateType::class, $newPositionState);
         $form->handleRequest($request);
 

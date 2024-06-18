@@ -40,4 +40,22 @@ class PositionStateRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findLatestClosedPositionStates()
+    {
+        $subquery = $this->createQueryBuilder('ps2')
+            ->select('MAX(ps2.id)')
+            ->innerJoin('ps2.position', 'p2')
+            ->where('ps2.exitTime IS NOT NULL')
+            ->groupBy('p2.id')
+            ->getDQL();
+
+        return $this->createQueryBuilder('ps')
+            ->innerJoin('ps.position', 'p')
+            ->where("ps.id IN ({$subquery})")
+            ->orderBy('ps.exitTime', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }
