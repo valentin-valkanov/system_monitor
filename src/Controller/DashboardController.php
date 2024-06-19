@@ -103,17 +103,17 @@ class DashboardController extends AbstractController
         $newPositionState->setVolume($positionState->getVolume());
         $newPositionState->setEntry($positionState->getEntry());
         $newPositionState->setStopLoss($positionState->getStopLoss());
-        $newPositionState->setTakeProfit($positionState->getTakeProfit());
-        $newPositionState->setExitTime($positionState->getExitTime());
         $newPositionState->setExit($positionState->getExit());
         $newPositionState->setCommission($positionState->getCommission());
+        $newPositionState->setDividend($positionState->getDividend());
         $newPositionState->setSwap($positionState->getSwap());
         $newPositionState->setProfit($positionState->getProfit());
         $newPositionState->setSystem($positionState->getSystem());
         $newPositionState->setStrategy($positionState->getStrategy());
         $newPositionState->setAssetClass($positionState->getAssetClass());
         $newPositionState->setGrade($positionState->getGrade());
-        $newPositionState->setDividend($positionState->getDividend());
+        $newPositionState->setState($positionState->getState());
+
 
         $form = $this->createForm(PositionStateType::class, $newPositionState);
         $form->handleRequest($request);
@@ -129,5 +129,28 @@ class DashboardController extends AbstractController
             'form' => $form->createView(),
         ]);
 
+    }
+
+    public function showPortfolioHeatMetrics()
+    {
+        $combinedRisk = $this->portfolioHeat->findCombinedRisk();
+        $combinedRiskPercent = $this->portfolioHeat->findCombinedRiskPercent($accountBalance);
+        $totalOpenPositions = $this->portfolioHeat->findTotalOpenPositions();
+        $newTrades = count($this->positionStateRepository->findNewTrades());
+        $closedTrades = count($this->positionStateRepository->findClosedPositionsForCurrentWeek());
+        $closedPnL = $this->portfolioHeat->getClosedPnL();
+        $openPnL = $this->portfolioHeat->getOpenPnL();
+        $account = $accountBalance + $closedPnL;
+
+        return$this->render('dashboard/dashboard.html.twig', [
+            'combinedRisk' => $combinedRisk,
+            'combinedRiskPercent' => $combinedRiskPercent,
+            'totalOpenPositions' => $totalOpenPositions,
+            'newTrades' => $newTrades,
+            'closedTrades' => $closedTrades,
+            'closedPnL' => $closedPnL,
+            'openPnL' => $openPnL,
+            'account' => $account
+        ]);
     }
 }

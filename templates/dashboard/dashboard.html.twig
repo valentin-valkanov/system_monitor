@@ -29,17 +29,16 @@
                             <th>Vol</th>
                             <th>Entry</th>
                             <th>Stop Loss</th>
-                            <th>Take Profit</th>
-                            <th>Exit Time</th>
                             <th>Exit</th>
                             <th>Comm</th>
+                            <th>Div</th>
                             <th>Swap</th>
                             <th>Profit</th>
                             <th>System</th>
                             <th>Strategy</th>
                             <th>Asset Class</th>
                             <th>Grade</th>
-                            <th>Div</th>
+                            <th>State</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -53,17 +52,16 @@
                             <td>{{ position.volume }}</td>
                             <td>{{ position.entry }}</td>
                             <td>{{ position.stopLoss }}</td>
-                            <td>{{ position.takeProfit }}</td>
-                            <td>{{ position.exitTime|date('Y-m-d H:i:s') }}</td>
                             <td>{{ position.exit }}</td>
                             <td>{{ position.commission }}</td>
+                            <td>{{ position.dividend }}</td>
                             <td>{{ position.swap }}</td>
                             <td>{{ position.profit }}</td>
                             <td>{{ position.system }}</td>
                             <td>{{ position.strategy }}</td>
                             <td>{{ position.assetClass }}</td>
                             <td>{{ position.grade }}</td>
-                            <td>{{ position.dividend }}</td>
+                            <td>{{ position.state }}</td>
                             <td>
                                 <a href="{{ path('app_position_edit', {'positionStateId': positionState.id}) }}" class="btn btn-primary btn-sm">Edit</a>
                                 <form action="{{ path('app_position_delete', {'id': position.id}) }}" method="post">
@@ -90,17 +88,16 @@
                                 <th>Vol</th>
                                 <th>Entry</th>
                                 <th>Stop Loss</th>
-                                <th>Take Profit</th>
-                                <th>Exit Time</th>
                                 <th>Exit</th>
                                 <th>Comm</th>
+                                <th>Div</th>
                                 <th>Swap</th>
                                 <th>Profit</th>
                                 <th>System</th>
                                 <th>Strategy</th>
                                 <th>Asset Class</th>
                                 <th>Grade</th>
-                                <th>Div</th>
+                                <th>State</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -114,17 +111,16 @@
                         <td>{{ position.volume }}</td>
                         <td>{{ position.entry }}</td>
                         <td>{{ position.stopLoss }}</td>
-                        <td>{{ position.takeProfit }}</td>
-                        <td>{{ position.exitTime|date('Y-m-d H:i:s') }}</td>
                         <td>{{ position.exit }}</td>
                         <td>{{ position.commission }}</td>
+                        <td>{{ position.dividend }}</td>
                         <td>{{ position.swap }}</td>
                         <td>{{ position.profit }}</td>
                         <td>{{ position.system }}</td>
                         <td>{{ position.strategy }}</td>
                         <td>{{ position.assetClass }}</td>
                         <td>{{ position.grade }}</td>
-                        <td>{{ position.dividend }}</td>
+                        <td>{{ position.state }}</td>
                         <td>
                             <a href="{{ path('app_position_edit', {'positionStateId': position.id}) }}" class="btn btn-primary btn-sm">Edit</a>
                             <form action="{{ path('app_position_delete', {'positionStateId': position.id}) }}" method="post">

@@ -28,7 +28,7 @@ class Position
         return $this->id;
     }
 
-    public function getPositionStates(): Collection
+    public function getPositionStates(Position $position): Collection
     {
         return $this->positionStates;
     }

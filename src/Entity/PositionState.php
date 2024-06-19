@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Form\PositionStateType;
 use App\Repository\PositionStateRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -35,16 +36,13 @@ class PositionState
     private ?float $stopLoss = null;
 
     #[ORM\Column(nullable: true)]
-    private ?float $takeProfit = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $exitTime = null;
-
-    #[ORM\Column(nullable: true)]
     private ?float $exit = null;
 
     #[ORM\Column]
     private ?float $commission = null;
+
+    #[ORM\Column]
+    private ?float $dividend = null;
 
     #[ORM\Column]
     private ?float $swap = null;
@@ -61,15 +59,18 @@ class PositionState
     #[ORM\Column(length: 255)]
     private ?string $assetClass = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $grade = null;
 
-    #[ORM\Column]
-    private ?float $dividend = null;
-
+    #[ORM\Column(length: 255)]
+    private ?string $state = null;
     #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'positionStates')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Position $position = null;
+
+    public const STATE_OPENED = 'opened';
+    public const STATE_MODIFIED = 'modified';
+    public const STATE_CLOSED = 'closed';
 
     public function getId(): ?int
     {
@@ -160,30 +161,6 @@ class PositionState
         return $this;
     }
 
-    public function getTakeProfit(): ?float
-    {
-        return $this->takeProfit;
-    }
-
-    public function setTakeProfit(?float $takeProfit): static
-    {
-        $this->takeProfit = $takeProfit;
-
-        return $this;
-    }
-
-    public function getExitTime(): ?\DateTimeImmutable
-    {
-        return $this->exitTime;
-    }
-
-    public function setExitTime(?\DateTimeImmutable $exitTime): static
-    {
-        $this->exitTime = $exitTime;
-
-        return $this;
-    }
-
     public function getExit(): ?float
     {
         return $this->exit;
@@ -204,6 +181,17 @@ class PositionState
     public function setCommission(float $commission): static
     {
         $this->commission = $commission;
+
+        return $this;
+    }
+    public function getDividend(): ?float
+    {
+        return $this->dividend;
+    }
+
+    public function setDividend(float $dividend): static
+    {
+        $this->dividend = $dividend;
 
         return $this;
     }
@@ -280,17 +268,16 @@ class PositionState
         return $this;
     }
 
-    public function getDividend(): ?float
+    public function getState(): ?string
     {
-        return $this->dividend;
+        return $this->state;
     }
 
-    public function setDividend(float $dividend): static
+    public function setState(?string $state): void
     {
-        $this->dividend = $dividend;
-
-        return $this;
+        $this->state = $state;
     }
+
 
     public function getPosition(): ?Position
     {
@@ -303,4 +290,5 @@ class PositionState
 
         return $this;
     }
+
 }

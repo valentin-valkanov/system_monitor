@@ -19,12 +19,14 @@ class PositionStateRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('ps')
             ->select('ps')
             ->innerJoin('ps.position', 'p')
-            ->where('ps.exitTime IS NULL')
+            ->where('ps.state IN (:openStates)')
+            ->setParameter('openStates', [PositionState::STATE_OPENED, PositionState::STATE_MODIFIED])
             ->andWhere('ps.id IN (
-                SELECT MAX(ps2.id)
-                FROM App\Entity\PositionState ps2
-                GROUP BY ps2.position
-            )')
+            SELECT MAX(ps2.id)
+            FROM App\Entity\PositionState ps2
+            WHERE ps2.position = ps.position
+            GROUP BY ps2.position
+        )')
             ->getQuery()
             ->getResult();
     }
@@ -34,7 +36,17 @@ class PositionStateRepository extends ServiceEntityRepository
         [$startOfWeek, $endOfWeek] = DateUtils::getCurrentWeekRange();
 
         return $this->createQueryBuilder('ps')
-            ->where('ps.exitTime BETWEEN :startOfWeek AND :endOfWeek')
+            ->select('ps')
+            ->innerJoin('ps.position', 'p')
+            ->where('ps.state = :closed')
+            ->andWhere('ps.entryTime BETWEEN :startOfWeek AND :endOfWeek')
+            ->andWhere('ps.id IN (
+            SELECT MAX(ps2.id)
+            FROM App\Entity\PositionState ps2
+            WHERE ps2.position = ps.position
+            GROUP BY ps2.position
+        )')
+            ->setParameter('closed', PositionState::STATE_CLOSED)
             ->setParameter('startOfWeek', $startOfWeek)
             ->setParameter('endOfWeek', $endOfWeek)
             ->getQuery()
@@ -46,16 +58,16 @@ class PositionStateRepository extends ServiceEntityRepository
         $subquery = $this->createQueryBuilder('ps2')
             ->select('MAX(ps2.id)')
             ->innerJoin('ps2.position', 'p2')
-            ->where('ps2.exitTime IS NOT NULL')
+            ->where('ps2.state = :closed')
             ->groupBy('p2.id')
             ->getDQL();
 
         return $this->createQueryBuilder('ps')
             ->innerJoin('ps.position', 'p')
             ->where("ps.id IN ({$subquery})")
-            ->orderBy('ps.exitTime', 'DESC')
+            ->setParameter('closed', PositionState::STATE_CLOSED)
+            ->orderBy('ps.entryTime', 'DESC')
             ->getQuery()
             ->getResult();
     }
-
 }
