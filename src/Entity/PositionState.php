@@ -15,10 +15,7 @@ class PositionState
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $entryTime = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $brokerId = null;
+    private ?\DateTimeImmutable $time = null;
 
     #[ORM\Column(length: 255)]
     private ?string $symbol = null;
@@ -30,13 +27,10 @@ class PositionState
     private ?float $volume = null;
 
     #[ORM\Column]
-    private ?float $entry = null;
+    private ?float $priceLevel = null;
 
     #[ORM\Column]
     private ?float $stopLoss = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?float $exit = null;
 
     #[ORM\Column]
     private ?float $commission = null;
@@ -69,37 +63,30 @@ class PositionState
     private ?Position $position = null;
 
     public const STATE_OPENED = 'opened';
-    public const STATE_MODIFIED = 'modified';
+    public const STATE_PARTIALLY_CLOSED = 'partially_closed';
+    public const STATE_SCALE_IN = 'scale_in';
     public const STATE_CLOSED = 'closed';
+
+    public const GRADE_NONE = 'none';
+    public const GRADE_A = 'A';
+    public const GRADE_B = 'B';
+    public const GRADE_C = 'C';
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getEntryTime(): ?\DateTimeImmutable
+    public function getTime(): ?\DateTimeImmutable
     {
-        return $this->entryTime;
+        return $this->time;
     }
 
-    public function setEntryTime(\DateTimeImmutable $entryTime): static
+    public function setTime(?\DateTimeImmutable $time): void
     {
-        $this->entryTime = $entryTime;
-
-        return $this;
+        $this->time = $time;
     }
 
-    public function getBrokerId(): ?string
-    {
-        return $this->brokerId;
-    }
-
-    public function setBrokerId(string $brokerId): static
-    {
-        $this->brokerId = $brokerId;
-
-        return $this;
-    }
 
     public function getSymbol(): ?string
     {
@@ -137,17 +124,16 @@ class PositionState
         return $this;
     }
 
-    public function getEntry(): ?float
+    public function getPriceLevel(): ?float
     {
-        return $this->entry;
+        return $this->priceLevel;
     }
 
-    public function setEntry(float $entry): static
+    public function setPriceLevel(?float $priceLevel): void
     {
-        $this->entry = $entry;
-
-        return $this;
+        $this->priceLevel = $priceLevel;
     }
+
 
     public function getStopLoss(): ?float
     {
@@ -157,18 +143,6 @@ class PositionState
     public function setStopLoss(float $stopLoss): static
     {
         $this->stopLoss = $stopLoss;
-
-        return $this;
-    }
-
-    public function getExit(): ?float
-    {
-        return $this->exit;
-    }
-
-    public function setExit(?float $exit): static
-    {
-        $this->exit = $exit;
 
         return $this;
     }
@@ -290,5 +264,4 @@ class PositionState
 
         return $this;
     }
-
 }

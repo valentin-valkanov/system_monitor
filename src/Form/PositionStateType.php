@@ -13,14 +13,12 @@ class PositionStateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('entryTime')
-            ->add('brokerId')
+            ->add('time')
             ->add('symbol')
             ->add('type')
             ->add('volume')
-            ->add('entry')
+            ->add('priceLevel')
             ->add('stopLoss')
-            ->add('exit')
             ->add('commission')
             ->add('dividend')
             ->add('swap')
@@ -28,11 +26,19 @@ class PositionStateType extends AbstractType
             ->add('system')
             ->add('strategy')
             ->add('assetClass')
-            ->add('grade')
-            ->add('state', ChoiceType::class, [
+            ->add('grade', ChoiceType::class, [
+                'choices' => [
+                    'None' => PositionState::GRADE_NONE,
+                    "A" => PositionState::GRADE_A,
+                    'B'=> PositionState::GRADE_B,
+                    'C' => PositionState::GRADE_C
+                ]
+            ])
+            ->add('stateType', ChoiceType::class, [
                 'choices' => [
                     'Opened' => PositionState::STATE_OPENED,
-                    'Modified' => PositionState::STATE_MODIFIED,
+                    'Partially_Closed' => PositionState::STATE_PARTIALLY_CLOSED,
+                    'Scale_In' => PositionState::STATE_SCALE_IN,
                     'Closed' => PositionState::STATE_CLOSED,
                 ],
             ])

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\PositionState;
+use App\Repository\PositionRepository;
 use App\Repository\PositionStateRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,15 +13,16 @@ class PositionController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private PositionStateRepository $positionStateRepository
+        private PositionRepository $positionRepository,
     )
     {
     }
     #[Route('position/show', name: 'app_closed_position_show_all')]
     public function showAllPositions(): Response
     {
-        $positions = $this->positionStateRepository->findLatestClosedPositionStates();
 
+        $positions = $this->positionRepository->findLatestClosedPositionStates();
+        dd($positions);
         return $this->render('position/closed_positions.html.twig', [
             'positions' => $positions,
         ]);

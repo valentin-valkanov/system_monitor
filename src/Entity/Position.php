@@ -17,6 +17,7 @@ class Position
 
     #[ORM\OneToMany(mappedBy: 'position', targetEntity: PositionState::class, orphanRemoval: true)]
     private Collection $positionStates;
+
     public function __construct()
     {
         $this->positionStates = new ArrayCollection();
