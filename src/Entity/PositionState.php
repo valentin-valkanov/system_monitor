@@ -3,10 +3,10 @@
 namespace App\Entity;
 
 use App\Form\PositionStateType;
-use App\Repository\PositionStateRepository;
+use App\Repository\PositionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PositionStateRepository::class)]
+#[ORM\Entity(repositoryClass: PositionRepository::class)]
 class PositionState
 {
     #[ORM\Id]
@@ -66,7 +66,6 @@ class PositionState
     public const STATE_PARTIALLY_CLOSED = 'partially_closed';
     public const STATE_SCALE_IN = 'scale_in';
     public const STATE_CLOSED = 'closed';
-
     public const GRADE_NONE = 'none';
     public const GRADE_A = 'A';
     public const GRADE_B = 'B';

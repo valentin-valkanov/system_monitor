@@ -9,14 +9,12 @@
 
     <div class="text-left bg-white p-4 rounded-md shadow-md mt-8" style="max-width: 600px; margin: auto;">
         {{ form_start(form) }}
-        {{ form_row(form.entryTime) }}
-        {{ form_row(form.brokerId) }}
+        {{ form_row(form.time) }}
         {{ form_row(form.symbol) }}
         {{ form_row(form.type) }}
         {{ form_row(form.volume) }}
-        {{ form_row(form.entry) }}
+        {{ form_row(form.priceLevel) }}
         {{ form_row(form.stopLoss) }}
-        {{ form_row(form.exit) }}
         {{ form_row(form.commission) }}
         {{ form_row(form.dividend) }}
         {{ form_row(form.swap) }}

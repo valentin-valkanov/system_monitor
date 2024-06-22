@@ -34,7 +34,7 @@ class PositionStateType extends AbstractType
                     'C' => PositionState::GRADE_C
                 ]
             ])
-            ->add('stateType', ChoiceType::class, [
+            ->add('state', ChoiceType::class, [
                 'choices' => [
                     'Opened' => PositionState::STATE_OPENED,
                     'Partially_Closed' => PositionState::STATE_PARTIALLY_CLOSED,

@@ -20,22 +20,31 @@ class PositionRepository extends ServiceEntityRepository
 
     public function findOpenPositions(): array
     {
-        return $this->createQueryBuilder('p')
+        // Fetch all positions with at least one state
+        $positions = $this->createQueryBuilder('p')
             ->innerJoin('p.positionStates', 'ps')
-            ->where('ps.state IN (:openStates)')
-            ->setParameter('openStates', [
-                PositionState::STATE_OPENED,
-                PositionState::STATE_PARTIALLY_CLOSED,
-                PositionState::STATE_SCALE_IN
-            ])
-            ->andWhere('ps.id IN (
-            SELECT MAX(ps2.id)
-            FROM App\Entity\PositionState ps2
-            WHERE ps2.position = p.id
-            GROUP BY ps2.position
-        )')
+            ->groupBy('p.id')
             ->getQuery()
             ->getResult();
+
+        $openPositions = [];
+
+        foreach ($positions as $position) {
+            $lastState = $position->getLastState();
+            if (
+                $lastState &&
+                (
+                    $lastState->getState() === PositionState::STATE_OPENED ||
+                    $lastState->getState() === PositionState::STATE_PARTIALLY_CLOSED ||
+                    $lastState->getState() === PositionState::STATE_SCALE_IN
+                )
+                ) {
+                $positionDTO = $position->addFieldsToOpenPositions();
+                $openPositions[] = $positionDTO;
+            }
+        }
+
+        return $openPositions;
     }
 
     public function findClosedPositionsForCurrentWeek(): array
@@ -43,38 +52,47 @@ class PositionRepository extends ServiceEntityRepository
 
         [$startOfWeek, $endOfWeek] = DateUtils::getCurrentWeekRange();
 
-        return $this->createQueryBuilder('p')
+        $positions = $this->createQueryBuilder('p')
             ->innerJoin('p.positionStates', 'ps')
             ->where('ps.state = :closed')
-            ->andWhere('ps.time BETWEEN :startOfWeek AND :endOfWeek')
-            ->andWhere('ps.id IN (
-            SELECT MAX(ps2.id)
-            FROM App\Entity\PositionState ps2
-            WHERE ps2.position = p.id
-            GROUP BY ps2.position
-        )')
+            ->andWhere('ps.time BETWEEN :start AND :end')
             ->setParameter('closed', PositionState::STATE_CLOSED)
-            ->setParameter('startOfWeek', $startOfWeek)
-            ->setParameter('endOfWeek', $endOfWeek)
+            ->setParameter('start', $startOfWeek)
+            ->setParameter('end', $endOfWeek)
+            ->groupBy('p.id')
             ->getQuery()
             ->getResult();
+
+        $closedPositions = [];
+
+        foreach ($positions as $position) {
+            $closedPositions = array_merge($closedPositions, $position->printClosedPositionsForCurrentWeek());
+        }
+
+        return $closedPositions;
     }
 
-    public function findLatestClosedPositionStates(): array
+    public function findAllClosedPositions(): array
     {
-        $subquery = $this->getEntityManager()->createQueryBuilder()
-            ->select('MAX(ps2.id)')
-            ->from(PositionState::class, 'ps2')
-            ->where('ps2.state = :closed')
-            ->groupBy('ps2.position')
-            ->getDQL();
-
-        return $this->createQueryBuilder('p')
+        // Fetch all positions with at least one state
+        $positions = $this->createQueryBuilder('p')
             ->innerJoin('p.positionStates', 'ps')
-            ->where("ps.id IN ({$subquery})")
-            ->setParameter('closed', PositionState::STATE_CLOSED)
-            ->orderBy('ps.time', 'DESC')
+            ->groupBy('p.id')
             ->getQuery()
             ->getResult();
+
+        $openPositions = [];
+
+        foreach ($positions as $position) {
+            dump($position);
+            $lastState = $position->getLastState();
+
+            if ($lastState && $lastState->getState() === PositionState::STATE_CLOSED) { //check if there is a state and if its state is 'closed'
+                $positionDTO = $position->addFieldsToClosedPositions();
+                $openPositions[] = $positionDTO;
+            }
+        }
+
+        return $openPositions;
     }
 }

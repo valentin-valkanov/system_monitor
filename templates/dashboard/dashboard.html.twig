@@ -23,7 +23,6 @@
                     <thead>
                         <tr>
                             <th>Entry Time</th>
-                            <th>Broker ID</th>
                             <th>Symbol</th>
                             <th>Type</th>
                             <th>Vol</th>
@@ -31,6 +30,7 @@
                             <th>Stop Loss</th>
                             <th>Exit</th>
                             <th>Comm</th>
+                            <th>Exit Time</th>
                             <th>Div</th>
                             <th>Swap</th>
                             <th>Profit</th>
@@ -45,8 +45,7 @@
                 <tbody>
                     {% for position in closedPositions %}
                         <tr>
-                            <td>{{ position.entryTime|date('Y-m-d H:i:s') }}</td>
-                            <td>{{ position.brokerID }}</td>
+                            <td>{{ position.getEntryTime().format('Y-m-d H:i:s') }}</td>
                             <td>{{ position.symbol }}</td>
                             <td>{{ position.type }}</td>
                             <td>{{ position.volume }}</td>
@@ -54,6 +53,7 @@
                             <td>{{ position.stopLoss }}</td>
                             <td>{{ position.exit }}</td>
                             <td>{{ position.commission }}</td>
+                            <td>{{ position.getExitTime().format('Y-m-d H:i:s') }}</td>
                             <td>{{ position.dividend }}</td>
                             <td>{{ position.swap }}</td>
                             <td>{{ position.profit }}</td>
@@ -82,7 +82,6 @@
                         <thead>
                             <tr>
                                 <th>Entry Time</th>
-                                <th>Broker ID</th>
                                 <th>Symbol</th>
                                 <th>Type</th>
                                 <th>Vol</th>
@@ -90,6 +89,7 @@
                                 <th>Stop Loss</th>
                                 <th>Exit</th>
                                 <th>Comm</th>
+                                <th>Exit Time</th>
                                 <th>Div</th>
                                 <th>Swap</th>
                                 <th>Profit</th>
@@ -104,15 +104,15 @@
                     <tbody>
                 {% for position in openPositions %}
                     <tr>
-                        <td>{{ position.entryTime|date('Y-m-d H:i:s') }}</td>
-                        <td>{{ position.brokerID }}</td>
+                        <td>{{ position.EntryTime().format('Y-m-d H:i:s') }}</td>
                         <td>{{ position.symbol }}</td>
                         <td>{{ position.type }}</td>
                         <td>{{ position.volume }}</td>
-                        <td>{{ position.entry }}</td>
+                        <td>{{ position.entryLevel }}</td>
                         <td>{{ position.stopLoss }}</td>
-                        <td>{{ position.exit }}</td>
+                        <td>{{ position.exitLevel }}</td>
                         <td>{{ position.commission }}</td>
+                        <td>{{ position.ExitTime()}}</td>
                         <td>{{ position.dividend }}</td>
                         <td>{{ position.swap }}</td>
                         <td>{{ position.profit }}</td>
@@ -122,10 +122,10 @@
                         <td>{{ position.grade }}</td>
                         <td>{{ position.state }}</td>
                         <td>
-                            <a href="{{ path('app_position_edit', {'positionStateId': position.id}) }}" class="btn btn-primary btn-sm">Edit</a>
-                            <form action="{{ path('app_position_delete', {'positionStateId': position.id}) }}" method="post">
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
+                            <a href="{{ path('app_position_edit', {'positionId': position.positionId}) }}" class="btn btn-primary btn-sm">Edit</a>
+{#                            <form action="{{ path('app_position_delete', {'positionId': positionId.id}) }}" method="post">#}
+{#                                <button type="submit" class="btn btn-danger">Delete</button>#}
+{#                            </form>#}
                         </td>
                     </tr>
                 {% endfor %}
