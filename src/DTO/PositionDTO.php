@@ -2,7 +2,7 @@
 
 namespace App\DTO;
 
-class OpenPositionDTO
+class PositionDTO
 {
     private int $positionId;
     private float $entryLevel;

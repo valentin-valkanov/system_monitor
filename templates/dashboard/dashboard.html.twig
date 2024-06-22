@@ -123,9 +123,9 @@
                         <td>{{ position.state }}</td>
                         <td>
                             <a href="{{ path('app_position_edit', {'positionId': position.positionId}) }}" class="btn btn-primary btn-sm">Edit</a>
-{#                            <form action="{{ path('app_position_delete', {'positionId': positionId.id}) }}" method="post">#}
-{#                                <button type="submit" class="btn btn-danger">Delete</button>#}
-{#                            </form>#}
+                            <form action="{{ path('app_position_delete', {'positionStateId': position.getPositionId}) }}" method="post">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}

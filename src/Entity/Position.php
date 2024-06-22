@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use App\DTO\ClosedPositionDTO;
-use App\DTO\OpenPositionDTO;
+use App\DTO\PositionDTO;
 use App\Repository\PositionRepository;
 use App\Utils\DateUtils;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -105,7 +105,7 @@ class Position
         return null;
     }
 
-    public function addFieldsToClosedPositions(): OpenPositionDTO
+    public function addFieldsToClosedPositions(): PositionDTO
     {
         $state = $this->getLastState();
 
@@ -114,7 +114,7 @@ class Position
         $exitLevel = $this->getLastState()->getPriceLevel();
         $exitTime = $this->getLastState()->getTime();
 
-        $positionDTO = new OpenPositionDTO(
+        $positionDTO = new PositionDTO(
             $this->getId(),
             $entryLevel,
             $entryTime,
@@ -164,7 +164,7 @@ class Position
         return $closedPositions;
     }
 
-    public function addFieldsToOpenPositions(): OpenPositionDTO
+    public function addFieldsToOpenPositions(): PositionDTO
     {
         $state = $this->getLastState();
 
@@ -173,7 +173,7 @@ class Position
         $exitLevel = null;
         $exitTime = null;
 
-        $openPositionDTO = new OpenPositionDTO(
+        $openPositionDTO = new PositionDTO(
             $this->getId(),
             $entryLevel,
             $entryTime,
