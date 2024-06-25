@@ -51,7 +51,7 @@ class Position
         return $lastState;
     }
 
-    public function getInitialState()
+    public function getInitialState(): PositionState
     {
         foreach ($this->getPositionStates($this) as $state){
             if($state->getState() === PositionState::STATE_OPENED){
