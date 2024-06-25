@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use App\DTO\ClosedPositionDTO;
 use App\DTO\PositionDTO;
 use App\Repository\PositionRepository;
 use App\Utils\DateUtils;
@@ -54,7 +53,11 @@ class Position
 
     public function getInitialState()
     {
-        $initialState = $this->positionStates->first();
+        foreach ($this->getPositionStates($this) as $state){
+            if($state->getState() === PositionState::STATE_OPENED){
+                $initialState = $state;
+            }
+        }
         return $initialState;
     }
 
@@ -73,7 +76,6 @@ class Position
         return null;
     }
 
-
     public function getEntryTime(): ?\DateTimeImmutable
     {
         $lastState = $this->getLastState();
@@ -87,6 +89,38 @@ class Position
         return null;
     }
 
+    public function getExitLevel():?float //relevant only STATE_CLOSED and STATE_PARTIALLY_CLOSED
+    {
+        $lastState = $this->getLastState();
+        $currentExitLevel = 0;
+
+        if ($lastState) {
+            if ($lastState->getState() === PositionState::STATE_CLOSED){
+                foreach ( $this->getPositionStates($this) as $state){
+                    if($state->getState() === PositionState::STATE_PARTIALLY_CLOSED){
+                        $currentExitLevel += ($state->getPriceLevel() * $state->getVolume());
+                    }
+                }
+                $currentExitLevel += $lastState->getPriceLevel() * $lastState->getVolume();
+            }
+        }
+        return $currentExitLevel / $this->getInitialState()->getVolume();
+    }
+
+    public function getCombinedVolume():float //relevant to STATE_SCALE_IN
+    {
+        $volume = $this->getInitialState()->getVolume();
+
+        foreach ($this->getPositionStates($this) as $state){
+
+            if($state->getState() === PositionState::STATE_SCALE_IN){
+
+                $volume += $state->getVolume();
+            }
+        }
+        return $volume;
+    }
+
     public function addFieldsToClosedPositions(): PositionDTO
     {
         $state = $this->getLastState();
@@ -95,6 +129,7 @@ class Position
         $entryTime = $this->getInitialState()->getTime();
         $exitLevel = $this->getExitLevel();
         $exitTime = $this->getLastState()->getTime();
+        $combinedVolume = $this->getCombinedVolume();
 
         $positionDTO = new PositionDTO(
             $this->getId(),
@@ -102,7 +137,7 @@ class Position
             $entryTime,
             $state->getSymbol(),
             $state->getType(),
-            $this->getInitialState()->getVolume(),
+            $combinedVolume,
             $state->getStopLoss(),
             $state->getCommission(),
             $exitTime,
@@ -129,18 +164,34 @@ class Position
             if ($state->getState() === PositionState::STATE_CLOSED &&
                 $state->getTime() >= $startOfWeek && $state->getTime() <= $endOfWeek) {
 
-                $entryLevel = $this->getEntryLevel();
-                $exitLevel = $this->getExitLevel();
-                $entryTime = $this->getEntryTime();
-                $exitTime = $state->getTime();
+                $state = $this->getLastState();
 
-                $closedPositions[] = new ClosedPositionDTO(
+                $entryLevel = $this->getInitialState()->getPriceLevel();
+                $entryTime = $this->getInitialState()->getTime();
+                $exitLevel = $this->getExitLevel();
+                $exitTime = $this->getLastState()->getTime();
+
+                $positionDTO = new PositionDTO(
                     $this->getId(),
                     $entryLevel,
-                    $exitLevel,
                     $entryTime,
+                    $state->getSymbol(),
+                    $state->getType(),
+                    $this->getInitialState()->getVolume(),
+                    $state->getStopLoss(),
+                    $state->getCommission(),
                     $exitTime,
+                    $exitLevel,
+                    $state->getDividend(),
+                    $state->getSwap(),
+                    $state->getProfit(),
+                    $state->getSystem(),
+                    $state->getStrategy(),
+                    $state->getAssetClass(),
+                    $state->getGrade(),
+                    $state->getState()
                 );
+
             }
         }
         return $closedPositions;
@@ -179,21 +230,5 @@ class Position
         return $openPositionDTO;
     }
 
-    public function getExitLevel():?float
-    {
-        $lastState = $this->getLastState();
-        $currentExitLevel = 0;
 
-        if ($lastState) {
-            if ($lastState->getState() === PositionState::STATE_CLOSED){
-                foreach ( $this->getPositionStates($this) as $state){
-                    if($state->getState() === PositionState::STATE_PARTIALLY_CLOSED){
-                        $currentExitLevel += ($state->getPriceLevel() * $state->getVolume());
-                    }
-                }
-                $currentExitLevel += $lastState->getPriceLevel() * $lastState->getVolume();
-            }
-        }
-        return $currentExitLevel / $this->getInitialState()->getVolume();
-    }
 }
