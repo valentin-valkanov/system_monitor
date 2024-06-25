@@ -84,7 +84,6 @@ class PositionRepository extends ServiceEntityRepository
         $openPositions = [];
 
         foreach ($positions as $position) {
-            dump($position);
             $lastState = $position->getLastState();
 
             if ($lastState && $lastState->getState() === PositionState::STATE_CLOSED) { //check if there is a state and if its state is 'closed'

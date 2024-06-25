@@ -73,24 +73,6 @@ class Position
         return null;
     }
 
-    public function getExitLevel(): ?float
-    {
-        $lastState = $this->getLastState();
-        $exitLevel = null;
-        $totalPrice = 0;
-        $count = 0;
-
-        if ($lastState) {
-            if ($lastState->getState() === PositionState::STATE_CLOSED) {
-                $exitLevel = $lastState->getPriceLevel();
-            } elseif ($lastState->getState() === PositionState::STATE_PARTIALLY_CLOSED) {
-                $totalPrice += $lastState->getPriceLevel();
-                $count++;
-            }
-        }
-
-        return $exitLevel ?? ($count > 0 ? $totalPrice / $count : null);
-    }
 
     public function getEntryTime(): ?\DateTimeImmutable
     {
@@ -111,7 +93,7 @@ class Position
 
         $entryLevel = $this->getInitialState()->getPriceLevel();
         $entryTime = $this->getInitialState()->getTime();
-        $exitLevel = $this->getLastState()->getPriceLevel();
+        $exitLevel = $this->getExitLevel();
         $exitTime = $this->getLastState()->getTime();
 
         $positionDTO = new PositionDTO(
@@ -120,7 +102,7 @@ class Position
             $entryTime,
             $state->getSymbol(),
             $state->getType(),
-            $state->getVolume(),
+            $this->getInitialState()->getVolume(),
             $state->getStopLoss(),
             $state->getCommission(),
             $exitTime,
@@ -195,5 +177,23 @@ class Position
         );
 
         return $openPositionDTO;
+    }
+
+    public function getExitLevel():?float
+    {
+        $lastState = $this->getLastState();
+        $currentExitLevel = 0;
+
+        if ($lastState) {
+            if ($lastState->getState() === PositionState::STATE_CLOSED){
+                foreach ( $this->getPositionStates($this) as $state){
+                    if($state->getState() === PositionState::STATE_PARTIALLY_CLOSED){
+                        $currentExitLevel += ($state->getPriceLevel() * $state->getVolume());
+                    }
+                }
+                $currentExitLevel += $lastState->getPriceLevel() * $lastState->getVolume();
+            }
+        }
+        return $currentExitLevel / $this->getInitialState()->getVolume();
     }
 }
