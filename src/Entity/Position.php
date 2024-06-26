@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\DTO\PositionDTO;
+use App\Factory\PositionDTOFactory;
 use App\Repository\PositionRepository;
 use App\Utils\DateUtils;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -104,7 +105,8 @@ class Position
                 $currentExitLevel += $lastState->getPriceLevel() * $lastState->getVolume();
             }
         }
-        return $currentExitLevel / $this->getInitialState()->getVolume();
+        $exitLevel = round($currentExitLevel / $this->getInitialState()->getVolume(), 4);
+        return $exitLevel;
     }
 
     public function getCombinedVolume():float //relevant to STATE_SCALE_IN
@@ -120,115 +122,4 @@ class Position
         }
         return $volume;
     }
-
-    public function addFieldsToClosedPositions(): PositionDTO
-    {
-        $state = $this->getLastState();
-
-        $entryLevel = $this->getInitialState()->getPriceLevel();
-        $entryTime = $this->getInitialState()->getTime();
-        $exitLevel = $this->getExitLevel();
-        $exitTime = $this->getLastState()->getTime();
-        $combinedVolume = $this->getCombinedVolume();
-
-        $positionDTO = new PositionDTO(
-            $this->getId(),
-            $entryLevel,
-            $entryTime,
-            $state->getSymbol(),
-            $state->getType(),
-            $combinedVolume,
-            $state->getStopLoss(),
-            $state->getCommission(),
-            $exitTime,
-            $exitLevel,
-            $state->getDividend(),
-            $state->getSwap(),
-            $state->getProfit(),
-            $state->getSystem(),
-            $state->getStrategy(),
-            $state->getAssetClass(),
-            $state->getGrade(),
-            $state->getState()
-        );
-
-        return $positionDTO;
-    }
-
-    public function printClosedPositionsForCurrentWeek(): array
-    {
-        $closedPositions = [];
-        [$startOfWeek, $endOfWeek] = DateUtils::getCurrentWeekRange();
-
-        foreach ($this->positionStates as $state) {
-            if ($state->getState() === PositionState::STATE_CLOSED &&
-                $state->getTime() >= $startOfWeek && $state->getTime() <= $endOfWeek) {
-
-                $state = $this->getLastState();
-
-                $entryLevel = $this->getInitialState()->getPriceLevel();
-                $entryTime = $this->getInitialState()->getTime();
-                $exitLevel = $this->getExitLevel();
-                $exitTime = $this->getLastState()->getTime();
-
-                $positionDTO = new PositionDTO(
-                    $this->getId(),
-                    $entryLevel,
-                    $entryTime,
-                    $state->getSymbol(),
-                    $state->getType(),
-                    $this->getInitialState()->getVolume(),
-                    $state->getStopLoss(),
-                    $state->getCommission(),
-                    $exitTime,
-                    $exitLevel,
-                    $state->getDividend(),
-                    $state->getSwap(),
-                    $state->getProfit(),
-                    $state->getSystem(),
-                    $state->getStrategy(),
-                    $state->getAssetClass(),
-                    $state->getGrade(),
-                    $state->getState()
-                );
-
-            }
-        }
-        return $closedPositions;
-    }
-
-    public function addFieldsToOpenPositions(): PositionDTO
-    {
-        $state = $this->getLastState();
-
-        $entryLevel = $this->getEntryLevel();
-        $entryTime = $this->getEntryTime();
-        $exitLevel = null;
-        $exitTime = null;
-
-        $openPositionDTO = new PositionDTO(
-            $this->getId(),
-            $entryLevel,
-            $entryTime,
-            $state->getSymbol(),
-            $state->getType(),
-            $state->getVolume(),
-            $state->getStopLoss(),
-            $state->getCommission(),
-            $exitTime,
-            $exitLevel,
-            $state->getDividend(),
-            $state->getSwap(),
-            $state->getProfit(),
-            $state->getSystem(),
-            $state->getStrategy(),
-            $state->getAssetClass(),
-            $state->getGrade(),
-            $state->getState()
-        );
-
-        return $openPositionDTO;
-    }
-
-
 }

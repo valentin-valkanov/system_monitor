@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Position;
 use App\Entity\PositionState;
+use App\Factory\PositionDTOFactory;
 use App\Form\PositionStateType;
 use App\Repository\PositionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -22,10 +23,10 @@ class DashboardController extends AbstractController
     }
 
     #[Route('/', name: 'app_dashboard')]
-    public function showWeeklyPositions(): Response
+    public function showWeeklyPositions(PositionDTOFactory $factory): Response
     {
-        $openPositions = $this->positionRepository->findOpenPositions();
-        $closedPositions = $this->positionRepository->findClosedPositionsForCurrentWeek();
+        $openPositions = $this->positionRepository->findOpenPositions($factory);
+        $closedPositions = $this->positionRepository->findClosedPositionsForCurrentWeek($factory);
 
         return $this->render('dashboard/dashboard.html.twig', [
             'openPositions' => $openPositions,

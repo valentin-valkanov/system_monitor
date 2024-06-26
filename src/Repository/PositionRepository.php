@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Position;
 use App\Entity\PositionState;
+use App\Factory\PositionDTOFactory;
 use App\Utils\DateUtils;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -18,7 +19,7 @@ class PositionRepository extends ServiceEntityRepository
         parent::__construct($registry, Position::class);
     }
 
-    public function findOpenPositions(): array
+    public function findOpenPositions(PositionDTOFactory $factory): array
     {
         // Fetch all positions with at least one state
         $positions = $this->createQueryBuilder('p')
@@ -39,7 +40,7 @@ class PositionRepository extends ServiceEntityRepository
                     $lastState->getState() === PositionState::STATE_SCALE_IN
                 )
                 ) {
-                $positionDTO = $position->addFieldsToOpenPositions();
+                $positionDTO = $factory->createForOpenPosition($position);
                 $openPositions[] = $positionDTO;
             }
         }
@@ -47,7 +48,7 @@ class PositionRepository extends ServiceEntityRepository
         return $openPositions;
     }
 
-    public function findClosedPositionsForCurrentWeek(): array
+    public function findClosedPositionsForCurrentWeek(PositionDTOFactory $factory): array
     {
 
         [$startOfWeek, $endOfWeek] = DateUtils::getCurrentWeekRange();
@@ -66,13 +67,17 @@ class PositionRepository extends ServiceEntityRepository
         $closedPositions = [];
 
         foreach ($positions as $position) {
-            $closedPositions = array_merge($closedPositions, $position->printClosedPositionsForCurrentWeek());
-        }
+            $lastState = $position->getLastState();
 
+            if ($lastState && $lastState->getState() === PositionState::STATE_CLOSED) { //check if there is a state and if its state is 'closed'
+                $positionDTO = $factory->createFieldsForClosedPosition($position);
+                $closedPositions[] = $positionDTO;
+            }
+        }
         return $closedPositions;
     }
 
-    public function findAllClosedPositions(): array
+    public function findAllClosedPositions(PositionDTOFactory $factory): array
     {
         // Fetch all positions with at least one state
         $positions = $this->createQueryBuilder('p')
@@ -81,17 +86,17 @@ class PositionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
 
-        $openPositions = [];
+        $closedPositions = [];
 
         foreach ($positions as $position) {
             $lastState = $position->getLastState();
 
             if ($lastState && $lastState->getState() === PositionState::STATE_CLOSED) { //check if there is a state and if its state is 'closed'
-                $positionDTO = $position->addFieldsToClosedPositions();
-                $openPositions[] = $positionDTO;
+                $positionDTO = $factory->createFieldsForClosedPosition($position);
+                $closedPositions[] = $positionDTO;
             }
         }
 
-        return $openPositions;
+        return $closedPositions;
     }
 }

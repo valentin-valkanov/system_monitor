@@ -43,28 +43,29 @@
                         </tr>
                     </thead>
                 <tbody>
-                    {% for position in closedPositions %}
+                    {% for closedPosition in closedPositions %}
                         <tr>
-                            <td>{{ position.getEntryTime().format('Y-m-d H:i:s') }}</td>
-                            <td>{{ position.symbol }}</td>
-                            <td>{{ position.type }}</td>
-                            <td>{{ position.volume }}</td>
-                            <td>{{ position.entry }}</td>
-                            <td>{{ position.stopLoss }}</td>
-                            <td>{{ position.exit }}</td>
-                            <td>{{ position.commission }}</td>
-                            <td>{{ position.getExitTime().format('Y-m-d H:i:s') }}</td>
-                            <td>{{ position.dividend }}</td>
-                            <td>{{ position.swap }}</td>
-                            <td>{{ position.profit }}</td>
-                            <td>{{ position.system }}</td>
-                            <td>{{ position.strategy }}</td>
-                            <td>{{ position.assetClass }}</td>
-                            <td>{{ position.grade }}</td>
-                            <td>{{ position.state }}</td>
+                            <td>{{ closedPosition.getEntryTime().format('Y-m-d H:i:s') }}</td>
+                            <td>{{ closedPosition.symbol }}</td>
+                            <td>{{ closedPosition.type }}</td>
+                            <td>{{ closedPosition.volume }}</td>
+                            <td>{{ closedPosition.getEntryLevel }}</td>
+                            <td>{{ closedPosition.stopLoss }}</td>
+                            <td>{{ closedPosition.getExitLevel() }}</td>
+                            <td>{{ closedPosition.commission }}</td>
+                            <td>{{ closedPosition.getExitTime().format('Y-m-d H:i:s') }}</td>
+
+                            <td>{{ closedPosition.dividend }}</td>
+                            <td>{{ closedPosition.swap }}</td>
+                            <td>{{ closedPosition.profit }}</td>
+                            <td>{{ closedPosition.system }}</td>
+                            <td>{{ closedPosition.strategy }}</td>
+                            <td>{{ closedPosition.assetClass }}</td>
+                            <td>{{ closedPosition.grade }}</td>
+                            <td>{{ closedPosition.state }}</td>
                             <td>
-                                <a href="{{ path('app_position_edit', {'positionStateId': positionState.id}) }}" class="btn btn-primary btn-sm">Edit</a>
-                                <form action="{{ path('app_position_delete', {'id': position.id}) }}" method="post">
+                                <a href="{{ path('app_position_edit', {'positionId': closedPosition.getPositionId}) }}" class="btn btn-primary btn-sm">Edit</a>
+                                <form action="{{ path('app_position_delete', {'positionStateId': closedPosition.getPositionId}) }}" method="post">
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                             </td>

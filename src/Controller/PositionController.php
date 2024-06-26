@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Position;
 use App\Entity\PositionState;
+use App\Factory\PositionDTOFactory;
 use App\Form\PositionStateType;
 use App\Repository\PositionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,9 +22,9 @@ class PositionController extends AbstractController
     {
     }
     #[Route('position/show', name: 'app_closed_position_show_all')]
-    public function showAllPositions(): Response
+    public function showAllPositions(PositionDTOFactory $factory): Response
     {
-        $closedPositions = $this->positionRepository->findAllClosedPositions();
+        $closedPositions = $this->positionRepository->findAllClosedPositions($factory);
 
         return $this->render('position/closed_positions.html.twig', [
             'closedPositions' => $closedPositions,
