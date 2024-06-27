@@ -44,7 +44,6 @@ class PositionRepository extends ServiceEntityRepository
                 $openPositions[] = $positionDTO;
             }
         }
-
         return $openPositions;
     }
 

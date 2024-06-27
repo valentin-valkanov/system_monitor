@@ -48,14 +48,21 @@ class Position
 
     public function getLastState(): PositionState
     {
-        $lastState = $this->positionStates->last();
+        $lastState = null;
+
+        foreach ($this->getPositionStates($this) as $state) {
+            if ($lastState === null || $state->getTime() > $lastState->getTime()) {
+                $lastState = $state;
+            }
+        }
+
         return $lastState;
     }
 
     public function getInitialState(): PositionState
     {
         foreach ($this->getPositionStates($this) as $state){
-            if($state->getState() === PositionState::STATE_OPENED){
+            if ($state->getState() === PositionState::STATE_OPENED){
                 $initialState = $state;
             }
         }
@@ -64,62 +71,128 @@ class Position
 
     public function getEntryLevel(): ?float
     {
-        $lastState = $this->getLastState();
+        $initialEntry = $this->getInitialState()->getPriceLevel();
+        $initialEntryVolumeAdjusted = $initialEntry * $this->getInitialState()->getVolume();
 
-        if ($lastState) {
-            if ($lastState->getState() === PositionState::STATE_OPENED ||
-                $lastState->getState() === PositionState::STATE_PARTIALLY_CLOSED ||
-                $lastState->getState() === PositionState::STATE_SCALE_IN) {
-                return $lastState->getPriceLevel();
+            foreach ($this->getPositionStates($this) as $state){
+
+                if($state->getState() === PositionState::STATE_SCALE_IN){
+                    $scaleInEntry = ($state->getPriceLevel() * $state->getVolume());
+
+                    $entry = $initialEntryVolumeAdjusted + $scaleInEntry;
+                    $volume = $this->getInitialState()->getVolume() + $state->getVolume();
+
+                    $entryLevel = $entry / $volume;
+
+
+                    return $this->formatLevel($entryLevel, $state);
+               }
             }
-        }
 
-        return null;
+        return $this->formatLevel($initialEntry, $this->getInitialState());
     }
 
     public function getEntryTime(): ?\DateTimeImmutable
     {
         $lastState = $this->getLastState();
 
-        if($lastState){
+        if ($lastState){
             if ($lastState->getState() === PositionState::STATE_OPENED ||
             $lastState->getState() === PositionState::STATE_PARTIALLY_CLOSED ||
             $lastState->getState() === PositionState::STATE_SCALE_IN) {
             return $lastState->getTime();}
         }
+
         return null;
     }
 
-    public function getExitLevel():?float //relevant only STATE_CLOSED and STATE_PARTIALLY_CLOSED
+    public function getExitLevel():?float
     {
         $lastState = $this->getLastState();
-        $currentExitLevel = 0;
 
-        if ($lastState) {
             if ($lastState->getState() === PositionState::STATE_CLOSED){
+
+                $lastExit = $lastState->getPriceLevel() * $lastState->getVolume();
+
                 foreach ( $this->getPositionStates($this) as $state){
-                    if($state->getState() === PositionState::STATE_PARTIALLY_CLOSED){
-                        $currentExitLevel += ($state->getPriceLevel() * $state->getVolume());
+
+                    if ($state->getState() === PositionState::STATE_PARTIALLY_CLOSED){
+                        $currentExit = $state->getPriceLevel() * $state->getVolume();
+                        $volume = $this->getClosedPositionVolume();
+                        $combinedExit = $lastExit + $currentExit;
+                        $exitLevel = $combinedExit / $volume;
+
+                            return $this->formatLevel($exitLevel, $state);
+                        }
                     }
                 }
-                $currentExitLevel += $lastState->getPriceLevel() * $lastState->getVolume();
-            }
-        }
-        $exitLevel = round($currentExitLevel / $this->getInitialState()->getVolume(), 4);
-        return $exitLevel;
+
+        return $this->formatLevel($lastState->getPriceLevel(), $lastState);
     }
-
-    public function getCombinedVolume():float //relevant to STATE_SCALE_IN
+    public function getClosedPositionVolume(): float
     {
-        $volume = $this->getInitialState()->getVolume();
-
-        foreach ($this->getPositionStates($this) as $state){
-
-            if($state->getState() === PositionState::STATE_SCALE_IN){
-
-                $volume += $state->getVolume();
+        $lastState = $this->getLastState();
+        if ($lastState->getState() === PositionState::STATE_CLOSED){
+            $volume = 0;
+            foreach ( $this->getPositionStates($this) as $state){
+                if($state->getState() === PositionState::STATE_OPENED || $state->getState() === PositionState::STATE_SCALE_IN){
+                    $volume += $state->getVolume();
+                }
             }
         }
         return $volume;
+    }
+
+    public function getOpenPositionVolume():float
+    {
+        $volume = $this->getInitialState()->getVolume();
+
+        if ($this->getLastState()->getState() === PositionState::STATE_SCALE_IN || $this->getLastState()->getState() === PositionState::STATE_PARTIALLY_CLOSED){
+
+            foreach ($this->getPositionStates($this) as $state){
+                if($state->getState() === PositionState::STATE_SCALE_IN){
+                    $volume += $state->getVolume();
+                }
+                if ($state->getState() === PositionState::STATE_PARTIALLY_CLOSED){
+                    $volume -= $state->getVolume();
+                }
+            }
+        }
+
+        return $volume;
+    }
+
+    public function getProfit(): float
+    {
+        $profit = 0;
+        foreach($this->getPositionStates($this) as $state){
+            $profit += $state->getProfit();
+        }
+
+        return $profit;
+    }
+
+    public function getSwap(): float
+    {
+        $swap = 0;
+        foreach($this->getPositionStates($this) as $state){
+            $swap += $state->getSwap();
+        }
+
+        return $swap;
+    }
+
+    private function formatLevel(float $level, PositionState $state): float
+    {
+        if ($state->getAssetClass() === 'currencies') {
+            if (str_contains($state->getSymbol(), 'JPY')) {
+                return round($level, 2);
+            }
+
+            return round($level, 4);
+
+        }
+
+        return round($level, 2);
     }
 }

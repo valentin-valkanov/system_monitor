@@ -11,11 +11,13 @@ class PositionDTOFactory
     {
         $state = $position->getLastState();
 
-        $entryLevel = $position->getInitialState()->getPriceLevel();
+        $entryLevel = $position->getEntryLevel();
         $entryTime = $position->getInitialState()->getTime();
         $exitLevel = $position->getExitLevel();
         $exitTime = $position->getLastState()->getTime();
-        $combinedVolume = $position->getCombinedVolume();
+        $volume = $position->getClosedPositionVolume();
+        $profit = $position->getProfit();
+        $swap = $position->getSwap();
 
         return  new PositionDTO(
             $position->getId(),
@@ -23,14 +25,14 @@ class PositionDTOFactory
             $entryTime,
             $state->getSymbol(),
             $state->getType(),
-            $combinedVolume,
+            $volume,
             $state->getStopLoss(),
             $state->getCommission(),
             $exitTime,
             $exitLevel,
             $state->getDividend(),
-            $state->getSwap(),
-            $state->getProfit(),
+            $swap,
+            $profit,
             $state->getSystem(),
             $state->getStrategy(),
             $state->getAssetClass(),
@@ -45,8 +47,12 @@ class PositionDTOFactory
 
         $entryLevel = $position->getEntryLevel();
         $entryTime = $position->getEntryTime();
+        $volume = $position->getOpenPositionVolume();
         $exitLevel = null;
         $exitTime = null;
+        $profit = $position->getProfit();
+        $swap = $position->getSwap();
+
 
         return new PositionDTO(
             $position->getId(),
@@ -54,14 +60,14 @@ class PositionDTOFactory
             $entryTime,
             $state->getSymbol(),
             $state->getType(),
-            $state->getVolume(),
+            $volume,
             $state->getStopLoss(),
             $state->getCommission(),
             $exitTime,
             $exitLevel,
             $state->getDividend(),
-            $state->getSwap(),
-            $state->getProfit(),
+            $swap,
+            $profit,
             $state->getSystem(),
             $state->getStrategy(),
             $state->getAssetClass(),
