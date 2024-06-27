@@ -16,8 +16,9 @@ class PositionDTOFactory
         $exitLevel = $position->getExitLevel();
         $exitTime = $position->getLastState()->getTime();
         $volume = $position->getClosedPositionVolume();
-        $profit = $position->getProfit();
-        $swap = $position->getSwap();
+        $profit = $position->calculateProfit();
+        $swap = $position->calculateSwap();
+        $commission = $position->calculateCommission();
 
         return  new PositionDTO(
             $position->getId(),
@@ -27,7 +28,7 @@ class PositionDTOFactory
             $state->getType(),
             $volume,
             $state->getStopLoss(),
-            $state->getCommission(),
+            $commission,
             $exitTime,
             $exitLevel,
             $state->getDividend(),
@@ -50,8 +51,9 @@ class PositionDTOFactory
         $volume = $position->getOpenPositionVolume();
         $exitLevel = null;
         $exitTime = null;
-        $profit = $position->getProfit();
-        $swap = $position->getSwap();
+        $profit = $position->calculateProfit();
+        $swap = $position->calculateSwap();
+        $commission = $position->calculateCommission();
 
 
         return new PositionDTO(
@@ -62,7 +64,7 @@ class PositionDTOFactory
             $state->getType(),
             $volume,
             $state->getStopLoss(),
-            $state->getCommission(),
+            $commission,
             $exitTime,
             $exitLevel,
             $state->getDividend(),

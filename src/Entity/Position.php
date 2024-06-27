@@ -162,7 +162,7 @@ class Position
         return $volume;
     }
 
-    public function getProfit(): float
+    public function calculateProfit(): float
     {
         $profit = 0;
         foreach($this->getPositionStates($this) as $state){
@@ -172,7 +172,7 @@ class Position
         return $profit;
     }
 
-    public function getSwap(): float
+    public function calculateSwap(): float
     {
         $swap = 0;
         foreach($this->getPositionStates($this) as $state){
@@ -180,6 +180,16 @@ class Position
         }
 
         return $swap;
+    }
+
+    public function calculateCommission(): float
+    {
+        $commission = 0;
+        foreach($this->getPositionStates($this) as $state){
+            $commission += $state->getCommission();
+        }
+
+        return $commission;
     }
 
     private function formatLevel(float $level, PositionState $state): float
