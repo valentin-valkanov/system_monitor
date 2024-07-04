@@ -46,4 +46,23 @@ class PositionTest extends TestCase
         $this->assertContains($positionState, $position->getPositionStates($position));
         $this->assertSame($position, $positionState->getPosition());
     }
+
+    public function testGetLastState()
+    {
+        //Setup
+        $position = new Position();
+        $state = new PositionState();
+        $state->setTime(new \DateTimeImmutable('2024-06-01 12:00:00'));
+        $position->addPositionState($state);
+
+        $state2 = new PositionState();
+        $state2->setTime(new \DateTimeImmutable('2024-06-02 12:00:00'));
+        $position->addPositionState($state2);
+
+        //Do Something
+        $lastState = $position->getLastState();
+
+        //Make Assertions
+        $this->assertSame($state2, $lastState);
+    }
 }
