@@ -42,6 +42,10 @@ when@prod:
             result_cache_driver:
                 type: pool
                 pool: doctrine.result_cache_pool
+            configuration:
+                set_identity_generation_preferences:
+                    'Doctrine\DBAL\Platforms\PostgreSQLPlatform': 'SEQUENCE'
+
 
     framework:
         cache:
