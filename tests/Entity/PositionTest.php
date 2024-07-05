@@ -19,7 +19,7 @@ class PositionTest extends TestCase
 
         $position = new Position($entityManager, $positionRepository);
 
-        $this->assertInstanceOf(ArrayCollection::class, $position->getPositionStates($position));
+        $this->assertInstanceOf(ArrayCollection::class, $position->getPositionStates());
     }
 
     public function testGetId(): void
@@ -43,7 +43,7 @@ class PositionTest extends TestCase
         $position->addPositionState($positionState);
 
         //Make Assertions
-        $this->assertContains($positionState, $position->getPositionStates($position));
+        $this->assertContains($positionState, $position->getPositionStates());
         $this->assertSame($position, $positionState->getPosition());
     }
 
@@ -64,5 +64,25 @@ class PositionTest extends TestCase
 
         //Make Assertions
         $this->assertSame($state2, $lastState);
+    }
+
+    public function testGetInitialState()
+    {
+        //Setup
+        $position = new Position();
+        $state = new PositionState();
+        $state->setTime(new \DateTimeImmutable('2024-06-03 12:00'));
+        $position->addPositionState($state);
+        $state->setState('opened');
+        $state2 = new PositionState();
+        $state2->setTime(new \DateTimeImmutable('2024-06-04 12:00'));
+        $position->addPositionState($state2);
+        $state2->setState('opened');
+
+        //Do Something
+        $initialState = $position->getInitialState();
+
+        //Make Assertions
+        $this->assertEquals($state, $initialState);
     }
 }

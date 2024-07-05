@@ -31,7 +31,7 @@ class Position
         return $this->id;
     }
 
-    public function getPositionStates(Position $position): Collection
+    public function getPositionStates(): Collection
     {
         return $this->positionStates;
     }
@@ -50,7 +50,7 @@ class Position
     {
         $lastState = null;
 
-        foreach ($this->getPositionStates($this) as $state) {
+        foreach ($this->getPositionStates() as $state) {
             if ($lastState === null || $state->getTime() > $lastState->getTime()) {
                 $lastState = $state;
             }
@@ -61,11 +61,14 @@ class Position
 
     public function getInitialState(): PositionState
     {
-        foreach ($this->getPositionStates($this) as $state){
-            if ($state->getState() === PositionState::STATE_OPENED){
+        $initialState = null;
+
+        foreach ($this->getPositionStates() as $state) {
+            if ($initialState === null || $state->getTime() < $initialState->getTime()) {
                 $initialState = $state;
             }
         }
+
         return $initialState;
     }
 
@@ -74,7 +77,7 @@ class Position
         $initialEntry = $this->getInitialState()->getPriceLevel();
         $initialEntryVolumeAdjusted = $initialEntry * $this->getInitialState()->getVolume();
 
-            foreach ($this->getPositionStates($this) as $state){
+            foreach ($this->getPositionStates() as $state){
 
                 if($state->getState() === PositionState::STATE_SCALE_IN){
                     $scaleInEntry = ($state->getPriceLevel() * $state->getVolume());
@@ -114,7 +117,7 @@ class Position
 
                 $lastExit = $lastState->getPriceLevel() * $lastState->getVolume();
 
-                foreach ( $this->getPositionStates($this) as $state){
+                foreach ( $this->getPositionStates() as $state){
 
                     if ($state->getState() === PositionState::STATE_PARTIALLY_CLOSED){
                         $currentExit = $state->getPriceLevel() * $state->getVolume();
@@ -134,7 +137,7 @@ class Position
         $lastState = $this->getLastState();
         if ($lastState->getState() === PositionState::STATE_CLOSED){
             $volume = 0;
-            foreach ( $this->getPositionStates($this) as $state){
+            foreach ( $this->getPositionStates() as $state){
                 if($state->getState() === PositionState::STATE_OPENED || $state->getState() === PositionState::STATE_SCALE_IN){
                     $volume += $state->getVolume();
                 }
@@ -149,7 +152,7 @@ class Position
 
         if ($this->getLastState()->getState() === PositionState::STATE_SCALE_IN || $this->getLastState()->getState() === PositionState::STATE_PARTIALLY_CLOSED){
 
-            foreach ($this->getPositionStates($this) as $state){
+            foreach ($this->getPositionStates() as $state){
                 if($state->getState() === PositionState::STATE_SCALE_IN){
                     $volume += $state->getVolume();
                 }
@@ -165,7 +168,7 @@ class Position
     public function calculateProfit(): float
     {
         $profit = 0;
-        foreach($this->getPositionStates($this) as $state){
+        foreach($this->getPositionStates() as $state){
             $profit += $state->getProfit();
         }
 
@@ -175,7 +178,7 @@ class Position
     public function calculateSwap(): float
     {
         $swap = 0;
-        foreach($this->getPositionStates($this) as $state){
+        foreach($this->getPositionStates() as $state){
             $swap += $state->getSwap();
         }
 
@@ -185,7 +188,7 @@ class Position
     public function calculateCommission(): float
     {
         $commission = 0;
-        foreach($this->getPositionStates($this) as $state){
+        foreach($this->getPositionStates() as $state){
             $commission += $state->getCommission();
         }
 
