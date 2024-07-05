@@ -50,39 +50,90 @@ class PositionTest extends TestCase
     public function testGetLastState()
     {
         //Setup
-        $position = new Position();
-        $state = new PositionState();
-        $state->setTime(new \DateTimeImmutable('2024-06-01 12:00:00'));
-        $position->addPositionState($state);
+        $states = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', ],
+            ['time' => '2024-06-04 12:00', 'state' => 'opened', ]
+        ];
 
-        $state2 = new PositionState();
-        $state2->setTime(new \DateTimeImmutable('2024-06-02 12:00:00'));
-        $position->addPositionState($state2);
+        $position = $this->createPositionWithStates($states);
 
         //Do Something
         $lastState = $position->getLastState();
 
         //Make Assertions
-        $this->assertSame($state2, $lastState);
+        $this->assertInstanceOf(PositionState::class, $lastState);
+        $this->assertEquals( new \DateTimeImmutable('2024-06-04 12:00'), $lastState->getTime());
     }
 
     public function testGetInitialState()
     {
         //Setup
-        $position = new Position();
-        $state = new PositionState();
-        $state->setTime(new \DateTimeImmutable('2024-06-03 12:00'));
-        $position->addPositionState($state);
-        $state->setState('opened');
-        $state2 = new PositionState();
-        $state2->setTime(new \DateTimeImmutable('2024-06-04 12:00'));
-        $position->addPositionState($state2);
-        $state2->setState('opened');
+        $states = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', ],
+            ['time' => '2024-06-04 12:00', 'state' => 'opened', ]
+        ];
+
+        $position = $this->createPositionWithStates($states);
 
         //Do Something
         $initialState = $position->getInitialState();
 
         //Make Assertions
-        $this->assertEquals($state, $initialState);
+        $this->assertInstanceOf(PositionState::class, $initialState);
+        $this->assertEquals( new \DateTimeImmutable('2024-06-03 12:00'), $initialState->getTime());
+    }
+
+
+    public function testGetEntryLevelWithScaleInState()
+    {
+        //Setup
+        $states = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', 'priceLevel' => 2, 'volume' => 1],
+            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', 'priceLevel' => 3, 'volume' => 2],
+        ];
+
+        $position = $this->createPositionWithStates($states);
+
+        //Do Something
+        $entryLevel = $position->getEntryLevel();
+
+        //Make Assertions
+
+        $this->assertEquals(2.67, $entryLevel);
+    }
+
+    public function testGetEntryLevelWithoutScaleInState()
+    {
+        //Setup
+        $states = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', 'priceLevel' => 2, 'volume' => 1],
+            ['time' => '2024-06-04 12:00', 'state' => 'closed', 'priceLevel' => 3, 'volume' => 2],
+        ];
+
+        $position = $this->createPositionWithStates($states);
+
+        //Do Something
+        $entryLevel = $position->getEntryLevel();
+
+        //Make Assertions
+        $this->assertEquals(2, $entryLevel);
+    }
+
+    private function createPositionWithStates(array $states): Position
+    {
+        $position = new Position();
+        foreach ($states as $stateData) {
+            $state = new PositionState();
+            $state->setTime(new \DateTimeImmutable($stateData['time']));
+            $state->setState($stateData['state']);
+            if(isset($stateData['priceLevel'])){
+                $state->setPriceLevel($stateData['priceLevel']);
+            }
+            if(isset($stateData['volume'])){
+                $state->setPriceLevel($stateData['volume']);
+            }
+            $position->addPositionState($state);
+        }
+        return $position;
     }
 }
