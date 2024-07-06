@@ -97,16 +97,9 @@ class Position
 
     public function getEntryTime(): ?\DateTimeImmutable
     {
-        $lastState = $this->getLastState();
+        $entryTime = $this->getInitialState()->getTime();
 
-        if ($lastState){
-            if ($lastState->getState() === PositionState::STATE_OPENED ||
-            $lastState->getState() === PositionState::STATE_PARTIALLY_CLOSED ||
-            $lastState->getState() === PositionState::STATE_SCALE_IN) {
-            return $lastState->getTime();}
-        }
-
-        return null;
+        return $entryTime;
     }
 
     public function getExitLevel():?float

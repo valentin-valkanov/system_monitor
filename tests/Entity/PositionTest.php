@@ -119,6 +119,25 @@ class PositionTest extends TestCase
         $this->assertEquals(2, $entryLevel);
     }
 
+    public function testGetEntryTime()
+    {
+        //Setup
+        $states = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', ],
+            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', ],
+            ['time' => '2024-06-05 12:00', 'state' => 'partially_closed', ],
+            ['time' => '2024-06-06 12:00', 'state' => 'closed', ],
+        ];
+
+        $position = $this->createPositionWithStates($states);
+
+        //Do Something
+        $entryTime = $position->getEntryTime();
+
+        //Make Assertions
+        $this->assertEquals(new \DateTimeImmutable('2024-06-03 12:00'), $entryTime);
+    }
+
     private function createPositionWithStates(array $states): Position
     {
         $position = new Position();
