@@ -72,29 +72,6 @@ class Position
         return $initialState;
     }
 
-    public function getEntryLevel(): ?float
-    {
-        $initialEntry = $this->getInitialState()->getPriceLevel();
-        $initialEntryVolumeAdjusted = $initialEntry * $this->getInitialState()->getVolume();
-
-            foreach ($this->getPositionStates() as $state){
-
-                if($state->getState() === PositionState::STATE_SCALE_IN){
-                    $scaleInEntry = ($state->getPriceLevel() * $state->getVolume());
-
-                    $entry = $initialEntryVolumeAdjusted + $scaleInEntry;
-                    $volume = $this->getInitialState()->getVolume() + $state->getVolume();
-
-                    $entryLevel = $entry / $volume;
-
-
-                    return $this->formatLevel($entryLevel, $state);
-               }
-            }
-
-        return $this->formatLevel($initialEntry, $this->getInitialState());
-    }
-
     public function getEntryTime(): ?\DateTimeImmutable
     {
         $entryTime = $this->getInitialState()->getTime();
@@ -102,6 +79,22 @@ class Position
         return $entryTime;
     }
 
+    public function getEntryLevel(): ?float
+    {
+        $combinedEntryLevel = 0;
+        $combinedVolume = 0;
+        foreach ($this->getPositionStates() as $state){
+
+            if($state->getState() === PositionState::STATE_OPENED || $state->getState() === PositionState::STATE_SCALE_IN) {
+                $currentEntryLevel = $state->getPriceLevel() * $state->getVolume();
+                $combinedEntryLevel += $currentEntryLevel;
+                $combinedVolume += $state->getVolume();
+            }
+
+        }
+        $exitLevel = $combinedEntryLevel / $combinedVolume;
+        return $this->formatLevel($exitLevel, $state);
+    }
     public function getExitLevel():?float
     {
         $combinedExitLevel = 0;
@@ -114,8 +107,10 @@ class Position
                 $combinedExitLevel += $currentExitLevel;
                 $combinedVolume += $state->getVolume();
 
+
             }
         }
+        dump($combinedVolume);
         $exitLevel = $combinedExitLevel / $combinedVolume;
         return $this->formatLevel($exitLevel, $state);
     }

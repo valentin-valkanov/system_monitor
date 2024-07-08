@@ -84,40 +84,33 @@ class PositionTest extends TestCase
     }
 
 
-    public function testGetEntryLevelWithScaleInState()
+    public function testGetEntryLevel()
     {
         //Setup
-        $states = [
+        $statesWithScaleInState = [
             ['time' => '2024-06-03 12:00', 'state' => 'opened', 'priceLevel' => 2, 'volume' => 1],
-            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', 'priceLevel' => 3, 'volume' => 2],
+            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', 'priceLevel' => 2.5, 'volume' => 1.5],
+            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', 'priceLevel' => 3, 'volume' => 2.0],
         ];
 
-        $position = $this->createPositionWithStates($states);
+        $ScaleInPosition = $this->createPositionWithStates($statesWithScaleInState);
 
-        //Do Something
-        $entryLevel = $position->getEntryLevel();
-
-        //Make Assertions
-
-        $this->assertEquals(2.67, $entryLevel);
-    }
-
-    public function testGetEntryLevelWithoutScaleInState()
-    {
-        //Setup
-        $states = [
+        $statesWithoutScaleInState = [
             ['time' => '2024-06-03 12:00', 'state' => 'opened', 'priceLevel' => 2, 'volume' => 1],
             ['time' => '2024-06-04 12:00', 'state' => 'closed', 'priceLevel' => 3, 'volume' => 2],
         ];
 
-        $position = $this->createPositionWithStates($states);
+        $position = $this->createPositionWithStates($statesWithoutScaleInState);
 
         //Do Something
+        $scaleInEntryLevel = $ScaleInPosition->getEntryLevel();
         $entryLevel = $position->getEntryLevel();
 
         //Make Assertions
-        $this->assertEquals(2, $entryLevel);
+        $this->assertEquals(2.61, $scaleInEntryLevel);
+        $this->assertEquals(2.0, $entryLevel);
     }
+
 
     public function testGetEntryTime()
     {
@@ -143,8 +136,9 @@ class PositionTest extends TestCase
         //Setup
         $statesWithPartiallyClosedState = [
             ['time' => '2024-06-03 12:00', 'state' => 'opened', 'priceLevel' => 1, 'volume' => 2],
-            ['time' => '2024-06-03 12:00', 'state' => 'partially_closed', 'priceLevel' => 2, 'volume' => 1],
-            ['time' => '2024-06-04 12:00', 'state' => 'closed', 'priceLevel' => 3, 'volume' => 2],
+            ['time' => '2024-06-03 12:00', 'state' => 'partially_closed', 'priceLevel' => 2, 'volume' => 0.7],
+            ['time' => '2024-06-03 12:00', 'state' => 'partially_closed', 'priceLevel' => 3, 'volume' => 0.7],
+            ['time' => '2024-06-04 12:00', 'state' => 'closed', 'priceLevel' => 4, 'volume' => 0.6],
         ];
 
         $positionWithPartialExit = $this->createPositionWithStates($statesWithPartiallyClosedState);
@@ -161,7 +155,7 @@ class PositionTest extends TestCase
         $exit = $positionWithoutPartialExit->getExitLevel();
 
         //Make Assertions
-        $this->assertEquals(2.67, $combinedExit);
+        $this->assertEquals(2.95, $combinedExit);
         $this->assertEquals(3, $exit);
     }
 
