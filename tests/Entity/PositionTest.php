@@ -184,13 +184,13 @@ class PositionTest extends TestCase
             ['time' => '2024-06-03 12:00', 'state' => 'opened', 'priceLevel' => 2, 'volume' => 1],
             ['time' => '2024-06-04 12:00', 'state' => 'scale_in', 'priceLevel' => 2.5, 'volume' => 1.5],
             ['time' => '2024-06-04 13:00', 'state' => 'scale_in', 'priceLevel' => 3, 'volume' => 2.0],
-            ['time' => '2024-06-05 12:00', 'state' => 'closed', 'priceLevel' => 5, 'volume' => 4.5],
+
         ];
 
         $closedPosition = $this->createPositionWithStates($states);
 
         //Do Something
-        $volume = $closedPosition->getClosedPositionVolume();
+        $volume = $closedPosition->getOpenPositionVolume();
 
         //Make Assertion
 
