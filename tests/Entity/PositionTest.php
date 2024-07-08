@@ -138,6 +138,33 @@ class PositionTest extends TestCase
         $this->assertEquals(new \DateTimeImmutable('2024-06-03 12:00'), $entryTime);
     }
 
+    public function testGetExitLevel()
+    {
+        //Setup
+        $statesWithPartiallyClosedState = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', 'priceLevel' => 1, 'volume' => 2],
+            ['time' => '2024-06-03 12:00', 'state' => 'partially_closed', 'priceLevel' => 2, 'volume' => 1],
+            ['time' => '2024-06-04 12:00', 'state' => 'closed', 'priceLevel' => 3, 'volume' => 2],
+        ];
+
+        $positionWithPartialExit = $this->createPositionWithStates($statesWithPartiallyClosedState);
+
+        $states = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', 'priceLevel' => 1, 'volume' => 2],
+            ['time' => '2024-06-04 12:00', 'state' => 'closed', 'priceLevel' => 3, 'volume' => 2],
+        ];
+
+        $positionWithoutPartialExit = $this->createPositionWithStates($states);
+
+        //Do Something
+        $combinedExit = $positionWithPartialExit->getExitLevel();
+        $exit = $positionWithoutPartialExit->getExitLevel();
+
+        //Make Assertions
+        $this->assertEquals(2.67, $combinedExit);
+        $this->assertEquals(3, $exit);
+    }
+
     private function createPositionWithStates(array $states): Position
     {
         $position = new Position();
@@ -149,7 +176,7 @@ class PositionTest extends TestCase
                 $state->setPriceLevel($stateData['priceLevel']);
             }
             if(isset($stateData['volume'])){
-                $state->setPriceLevel($stateData['volume']);
+                $state->setVolume($stateData['volume']);
             }
             $position->addPositionState($state);
         }

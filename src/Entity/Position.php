@@ -104,26 +104,20 @@ class Position
 
     public function getExitLevel():?float
     {
-        $lastState = $this->getLastState();
+        $combinedExitLevel = 0;
+        $combinedVolume = 0;
 
-            if ($lastState->getState() === PositionState::STATE_CLOSED){
+        foreach ( $this->getPositionStates() as $state){
 
-                $lastExit = $lastState->getPriceLevel() * $lastState->getVolume();
+            if ($state->getState() === PositionState::STATE_PARTIALLY_CLOSED || $state->getState() === PositionState::STATE_CLOSED){
+                $currentExitLevel = $state->getPriceLevel() * $state->getVolume();
+                $combinedExitLevel += $currentExitLevel;
+                $combinedVolume += $state->getVolume();
 
-                foreach ( $this->getPositionStates() as $state){
-
-                    if ($state->getState() === PositionState::STATE_PARTIALLY_CLOSED){
-                        $currentExit = $state->getPriceLevel() * $state->getVolume();
-                        $volume = $this->getClosedPositionVolume();
-                        $combinedExit = $lastExit + $currentExit;
-                        $exitLevel = $combinedExit / $volume;
-
-                            return $this->formatLevel($exitLevel, $state);
-                        }
-                    }
-                }
-
-        return $this->formatLevel($lastState->getPriceLevel(), $lastState);
+            }
+        }
+        $exitLevel = $combinedExitLevel / $combinedVolume;
+        return $this->formatLevel($exitLevel, $state);
     }
     public function getClosedPositionVolume(): float
     {
