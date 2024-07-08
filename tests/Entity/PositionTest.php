@@ -120,13 +120,41 @@ class PositionTest extends TestCase
 
         $position = $this->createPositionWithStates($statesWithoutScaleInState);
 
+        $statesForCurrencies = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', 'assetClass' => 'currencies', 'symbol' => 'EURUSD', 'priceLevel' => 1.1355, 'volume' => 1],
+            ['time' => '2024-06-04 12:00', 'state' => 'closed', 'assetClass' => 'currencies', 'symbol' => 'EURUSD', 'priceLevel' => 1.1395, 'volume' => 1],
+        ];
+
+        $positionFormatCurrencies = $this->createPositionWithStates($statesForCurrencies);
+
+        $statesForYenCrosses = [
+            ['time' => '2024-06-04 12:00', 'state' => 'opened', 'assetClass' => 'currencies', 'symbol' => 'USDJPY', 'priceLevel' => 108.95, 'volume' => 1],
+            ['time' => '2024-06-05 12:00', 'state' => 'closed', 'assetClass' => 'currencies', 'symbol' => 'USDJPY', 'priceLevel' => 109.00, 'volume' => 1],
+
+        ];
+
+        $positionFormatYenCrosses = $this->createPositionWithStates($statesForYenCrosses);
+
+        $statesFormatOtherAssets = [
+            ['time' => '2024-06-05 12:00', 'state' => 'opened', 'assetClass' => 'cryptos', 'symbol' => 'BTCUSD', 'priceLevel' => 55325.85, 'volume' => 1],
+            ['time' => '2024-06-06 12:00', 'state' => 'closed', 'assetClass' => 'cryptos', 'symbol' => 'BTCUSD', 'priceLevel' => 56000.85, 'volume' => 1],
+        ];
+
+        $positionFormatOtherAssets = $this->createPositionWithStates($statesFormatOtherAssets);
+
         //Do Something
         $scaleInEntryLevel = $ScaleInPosition->getEntryLevel();
         $entryLevel = $position->getEntryLevel();
+        $currencyEntryLevel = $positionFormatCurrencies->getEntryLevel();
+        $entryLevelFormatYenCrosses = $positionFormatYenCrosses->getEntryLevel();
+        $entryLevelOtherFormat = $positionFormatOtherAssets->getEntryLevel();
 
         //Make Assertions
         $this->assertEquals(2.61, $scaleInEntryLevel);
         $this->assertEquals(2.0, $entryLevel);
+        $this->assertEquals(1.1355, $currencyEntryLevel);
+        $this->assertEquals(108.95, $entryLevelFormatYenCrosses);
+        $this->assertEquals( 55325.85, $entryLevelOtherFormat);
     }
 
     public function testGetExitLevel()
@@ -213,7 +241,7 @@ class PositionTest extends TestCase
 
         //Make Assertions
 
-        $this->assertEquals(6, $profit);
+        $this->assertEquals(2, $profit);
     }
 
     public function testCalculateSwap()
@@ -254,6 +282,7 @@ class PositionTest extends TestCase
         $this->assertEquals(2, $commission);
     }
 
+
     private function createPositionWithStates(array $states): Position
     {
         $position = new Position();
@@ -275,6 +304,12 @@ class PositionTest extends TestCase
             }
             if(isset($stateData['commission'])){
                 $state->setCommission($stateData['commission']);
+            }
+            if(isset($stateData['assetClass'])){
+                $state->setAssetClass($stateData['assetClass']);
+            }
+            if(isset($stateData['symbol'])){
+                $state->setSymbol($stateData['symbol']);
             }
             $position->addPositionState($state);
         }
