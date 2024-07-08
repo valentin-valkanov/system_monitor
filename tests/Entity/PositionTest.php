@@ -83,6 +83,24 @@ class PositionTest extends TestCase
         $this->assertEquals( new \DateTimeImmutable('2024-06-03 12:00'), $initialState->getTime());
     }
 
+    public function testGetEntryTime()
+    {
+        //Setup
+        $states = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', ],
+            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', ],
+            ['time' => '2024-06-05 12:00', 'state' => 'partially_closed', ],
+            ['time' => '2024-06-06 12:00', 'state' => 'closed', ],
+        ];
+
+        $position = $this->createPositionWithStates($states);
+
+        //Do Something
+        $entryTime = $position->getEntryTime();
+
+        //Make Assertions
+        $this->assertEquals(new \DateTimeImmutable('2024-06-03 12:00'), $entryTime);
+    }
 
     public function testGetEntryLevel()
     {
@@ -111,26 +129,6 @@ class PositionTest extends TestCase
         $this->assertEquals(2.0, $entryLevel);
     }
 
-
-    public function testGetEntryTime()
-    {
-        //Setup
-        $states = [
-            ['time' => '2024-06-03 12:00', 'state' => 'opened', ],
-            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', ],
-            ['time' => '2024-06-05 12:00', 'state' => 'partially_closed', ],
-            ['time' => '2024-06-06 12:00', 'state' => 'closed', ],
-        ];
-
-        $position = $this->createPositionWithStates($states);
-
-        //Do Something
-        $entryTime = $position->getEntryTime();
-
-        //Make Assertions
-        $this->assertEquals(new \DateTimeImmutable('2024-06-03 12:00'), $entryTime);
-    }
-
     public function testGetExitLevel()
     {
         //Setup
@@ -157,6 +155,46 @@ class PositionTest extends TestCase
         //Make Assertions
         $this->assertEquals(2.95, $combinedExit);
         $this->assertEquals(3, $exit);
+    }
+
+    public function testGetClosedPositionVolume()
+    {
+        //Setup
+        $states = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', 'priceLevel' => 2, 'volume' => 1],
+            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', 'priceLevel' => 2.5, 'volume' => 1.5],
+            ['time' => '2024-06-04 13:00', 'state' => 'scale_in', 'priceLevel' => 3, 'volume' => 2.0],
+            ['time' => '2024-06-05 12:00', 'state' => 'closed', 'priceLevel' => 5, 'volume' => 4.5],
+        ];
+
+        $closedPosition = $this->createPositionWithStates($states);
+
+        //Do Something
+        $volume = $closedPosition->getClosedPositionVolume();
+
+        //Make Assertion
+
+        $this->assertEquals(4.5, $volume);
+    }
+
+    public function testGetOpenPositionVolume()
+    {
+        //Setup
+        $states = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', 'priceLevel' => 2, 'volume' => 1],
+            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', 'priceLevel' => 2.5, 'volume' => 1.5],
+            ['time' => '2024-06-04 13:00', 'state' => 'scale_in', 'priceLevel' => 3, 'volume' => 2.0],
+            ['time' => '2024-06-05 12:00', 'state' => 'closed', 'priceLevel' => 5, 'volume' => 4.5],
+        ];
+
+        $closedPosition = $this->createPositionWithStates($states);
+
+        //Do Something
+        $volume = $closedPosition->getClosedPositionVolume();
+
+        //Make Assertion
+
+        $this->assertEquals(4.5, $volume);
     }
 
     private function createPositionWithStates(array $states): Position

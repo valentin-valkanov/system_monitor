@@ -110,13 +110,14 @@ class Position
 
             }
         }
-        dump($combinedVolume);
+
         $exitLevel = $combinedExitLevel / $combinedVolume;
         return $this->formatLevel($exitLevel, $state);
     }
     public function getClosedPositionVolume(): float
     {
         $lastState = $this->getLastState();
+
         if ($lastState->getState() === PositionState::STATE_CLOSED){
             $volume = 0;
             foreach ( $this->getPositionStates() as $state){
@@ -125,6 +126,7 @@ class Position
                 }
             }
         }
+
         return $volume;
     }
 
