@@ -106,8 +106,6 @@ class Position
                 $currentExitLevel = $state->getPriceLevel() * $state->getVolume();
                 $combinedExitLevel += $currentExitLevel;
                 $combinedVolume += $state->getVolume();
-
-
             }
         }
 

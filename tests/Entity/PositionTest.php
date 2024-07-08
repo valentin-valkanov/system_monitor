@@ -197,6 +197,63 @@ class PositionTest extends TestCase
         $this->assertEquals(4.5, $volume);
     }
 
+    public function testCalculateProfit()
+    {
+        //Setup
+        $states = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', 'profit' => 0],
+            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', 'profit' => 0],
+            ['time' => '2024-06-04 13:00', 'state' => 'closed', 'profit' => 2],
+        ];
+
+        $position = $this->createPositionWithStates($states);
+
+        //Do Something
+        $profit = $position->calculateProfit();
+
+        //Make Assertions
+
+        $this->assertEquals(6, $profit);
+    }
+
+    public function testCalculateSwap()
+    {
+        //Setup
+        $states = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', 'swap' => 0],
+            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', 'swap' => 1],
+            ['time' => '2024-06-05 12:00', 'state' => 'scale_in', 'swap' => 2],
+        ];
+
+        $position = $this->createPositionWithStates($states);
+
+        //Do Something
+        $swap = $position->calculateSwap();
+
+        //Make Assertions
+
+        $this->assertEquals(3, $swap);
+    }
+
+    public function testCalculateCommission()
+    {
+        //Setup
+        $states = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', 'commission' => 1],
+            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', 'commission' => 0],
+            ['time' => '2024-06-05 12:00', 'state' => 'closed', 'commission' => 1],
+        ];
+
+        $position = $this->createPositionWithStates($states);
+
+        //Do Something
+        $commission = $position->calculateCommission();
+
+        //Make Assertions
+
+        $this->assertEquals(2, $commission);
+    }
+
     private function createPositionWithStates(array $states): Position
     {
         $position = new Position();
@@ -209,6 +266,15 @@ class PositionTest extends TestCase
             }
             if(isset($stateData['volume'])){
                 $state->setVolume($stateData['volume']);
+            }
+            if(isset($stateData['profit'])){
+                $state->setProfit($stateData['profit']);
+            }
+            if(isset($stateData['swap'])){
+            $state->setSwap($stateData['swap']);
+            }
+            if(isset($stateData['commission'])){
+                $state->setCommission($stateData['commission']);
             }
             $position->addPositionState($state);
         }
