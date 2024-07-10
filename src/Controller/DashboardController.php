@@ -56,16 +56,10 @@ class DashboardController extends AbstractController
         ]);
     }
 
-    #[Route('/position/delete/{positionStateId}', name: 'app_position_delete')]
-    public function deletePosition(Request $request, int $positionStateId): Response
+    #[Route('/position/delete/{positionId}', name: 'app_position_delete')]
+    public function deletePosition(Request $request, int $positionId): Response
     {
-        $positionState = $this->entityManager->getRepository(PositionState::class)->find($positionStateId);
-
-        if (!$positionState) {
-            throw $this->createNotFoundException('PositionState not found.');
-        }
-
-        $position = $positionState->getPosition($positionStateId);
+        $position = $this->entityManager->getRepository(Position::class)->find($positionId);
 
         if(!$position){
             throw $this->createNotFoundException('Position not found');
@@ -103,7 +97,6 @@ class DashboardController extends AbstractController
         $newPositionState->setAssetClass($lastState->getAssetClass());
         $newPositionState->setGrade($lastState->getGrade());
         $newPositionState->setState($lastState->getState());
-
 
         $form = $this->createForm(PositionStateType::class, $newPositionState);
         $form->handleRequest($request);

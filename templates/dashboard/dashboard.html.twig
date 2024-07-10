@@ -45,7 +45,7 @@
                 <tbody>
                     {% for closedPosition in closedPositions %}
                         <tr>
-                            <td>{{ closedPosition.getEntryTime().format('Y-m-d H:i:s') }}</td>
+                            <td>{{ closedPosition.getEntryTime().format('Y.m.d H:i') }}</td>
                             <td>{{ closedPosition.symbol }}</td>
                             <td>{{ closedPosition.type }}</td>
                             <td>{{ closedPosition.volume }}</td>
@@ -53,7 +53,7 @@
                             <td>{{ closedPosition.stopLoss }}</td>
                             <td>{{ closedPosition.getExitLevel() }}</td>
                             <td>{{ closedPosition.commission }}</td>
-                            <td>{{ closedPosition.getExitTime().format('Y-m-d H:i:s') }}</td>
+                            <td>{{ closedPosition.getExitTime().format('Y.m.d H:i') }}</td>
 
                             <td>{{ closedPosition.dividend }}</td>
                             <td>{{ closedPosition.swap }}</td>
@@ -65,7 +65,7 @@
                             <td>{{ closedPosition.state }}</td>
                             <td>
                                 <a href="{{ path('app_position_edit', {'positionId': closedPosition.getPositionId}) }}" class="btn btn-primary btn-sm">Edit</a>
-                                <form action="{{ path('app_position_delete', {'positionStateId': closedPosition.getPositionId}) }}" method="post">
+                                <form action="{{ path('app_position_delete', {'positionId': closedPosition.getPositionId}) }}" method="post">
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>
                             </td>
@@ -105,7 +105,7 @@
                     <tbody>
                 {% for position in openPositions %}
                     <tr>
-                        <td>{{ position.EntryTime().format('Y-m-d H:i:s') }}</td>
+                        <td>{{ position.EntryTime().format('Y.m.d H:i') }}</td>
                         <td>{{ position.symbol }}</td>
                         <td>{{ position.type }}</td>
                         <td>{{ position.volume }}</td>
@@ -124,7 +124,7 @@
                         <td>{{ position.state }}</td>
                         <td>
                             <a href="{{ path('app_position_edit', {'positionId': position.positionId}) }}" class="btn btn-primary btn-sm">Edit</a>
-                            <form action="{{ path('app_position_delete', {'positionStateId': position.getPositionId}) }}" method="post">
+                            <form action="{{ path('app_position_delete', {'positionId': position.getPositionId}) }}" method="post">
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </form>
                         </td>

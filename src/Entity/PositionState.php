@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Form\PositionStateType;
 use App\Repository\PositionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PositionRepository::class)]
 class PositionState
@@ -15,49 +16,80 @@ class PositionState
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "Time cannot be blank.")]
     private ?\DateTimeImmutable $time = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Symbol cannot be blank.")]
+    #[Assert\Type('string')]
     private ?string $symbol = null;
 
-    #[ORM\Column(length: 255)]
+    // Add other fields with validation constraints
+    #[ORM\Column]
+    #[Assert\NotBlank(message: "Type cannot be blank.")]
     private ?string $type = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: "System cannot be blank.")]
+    private ?string $system = null;
+
+    #[ORM\Column]
+    #[Assert\NotBlank(message: "Strategy cannot be blank.")]
+    private ?string $strategy = null;
+
+    #[ORM\Column]
+    #[Assert\NotBlank(message: "Asset class cannot be blank.")]
+    private ?string $assetClass = null;
+
+    #[ORM\Column]
+    #[Assert\Type(type: 'float', message: "Volume must be a number.")]
+    #[Assert\NotBlank(message: "Volume cannot be blank.")]
     private ?float $volume = null;
 
     #[ORM\Column]
+    #[Assert\Type(type: 'float', message: "Price level must be a number.")]
+    #[Assert\NotBlank(message: "Price level cannot be blank.")]
     private ?float $priceLevel = null;
 
     #[ORM\Column]
+    #[Assert\Type(type: 'float', message: "Stop loss must be a number.")]
+    #[Assert\NotBlank(message: "Stop loss cannot be blank.")]
     private ?float $stopLoss = null;
 
     #[ORM\Column]
+    #[Assert\Type(type: 'float', message: "Commission must be a number.")]
+    #[Assert\NotBlank(message: "Commission cannot be blank.")]
     private ?float $commission = null;
 
     #[ORM\Column]
+    #[Assert\Type(type: 'float', message: "Dividend must be a number.")]
+    #[Assert\NotBlank(message: "Dividend cannot be blank.")]
     private ?float $dividend = null;
 
     #[ORM\Column]
+    #[Assert\Type(type: 'float', message: "Swap must be a number.")]
+    #[Assert\NotBlank(message: "Swap cannot be blank.")]
     private ?float $swap = null;
 
     #[ORM\Column]
+    #[Assert\Type(type: 'float', message: "Profit must be a number.")]
+    #[Assert\NotBlank(message: "Profit cannot be blank.")]
     private ?float $profit = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $system = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $strategy = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $assetClass = null;
-
-    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Grade cannot be blank.")]
+    #[Assert\Choice(
+        choices: [self::GRADE_A, self::GRADE_B, self::GRADE_C, self::GRADE_NONE],
+        message: "Choose a valid grade.")]
     private ?string $grade = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "State cannot be blank.")]
+    #[Assert\Choice(
+        choices: [self::STATE_OPENED, self::STATE_CLOSED, self::STATE_PARTIALLY_CLOSED, self::STATE_SCALE_IN],
+        message: "Choose a valid state.")]
     private ?string $state = null;
+
     #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'positionStates')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Position $position = null;
