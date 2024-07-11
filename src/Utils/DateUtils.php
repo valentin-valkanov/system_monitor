@@ -1,14 +1,6 @@
 <?php declare(strict_types=1);
 
 namespace App\Utils;
-
-/**
- * Class DateUtils
- *
- * @author Valentin Valkanov <valentinvalkanof@gmail.com>
- * @copyright
- * @version
- */
 class DateUtils
 {
     public static function getCurrentWeekRange(): array
