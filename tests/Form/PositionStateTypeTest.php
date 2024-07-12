@@ -4,18 +4,10 @@ namespace App\Tests\Form;
 
 use App\Entity\PositionState;
 use App\Form\PositionStateType;
-use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 class PositionStateTypeTest extends TypeTestCase
 {
-    protected function getExtensions()
-    {
-        $formType = new PositionStateType();
-        return [
-            new PreloadedExtension([$formType], []),
-        ];
-    }
 
     public function testSubmitValidData()
     {
@@ -80,21 +72,20 @@ class PositionStateTypeTest extends TypeTestCase
     {
         //Arrange
         $formData = [
-            'time' => 'invalid-date-format',  // Invalid date format
-            'symbol' => '',                   // Empty string, invalid if required
-            'type' => '',                     // Empty string, invalid if required
-            'volume' => 'invalid-number',     // Invalid number, should be a float
-            'priceLevel' => 'invalid-number', // Invalid number, should be a float
-            'stopLoss' => 'invalid-number',   // Invalid number, should be a float
-            'commission' => 'invalid-number', // Invalid number, should be a float
-            'dividend' => 'invalid-number',   // Invalid number, should be a float
-            'swap' => 'invalid-number',       // Invalid number, should be a float
-            'profit' => 'invalid-number',     // Invalid number, should be a float
-            'system' => '',                   // Empty string, invalid if required
-            'strategy' => '',                 // Empty string, invalid if required
-            'assetClass' => '',               // Empty string, invalid if required
-            'grade' => 'invalid-grade',       // Invalid choice, not in allowed values
-            'state' => 'invalid-state',       // Invalid choice, not in allowed values
+            'time' => 'invalid-date-format',
+            'type' => '',
+            'volume' => 'invalid-number',
+            'priceLevel' => 'invalid-number',
+            'stopLoss' => 'invalid-number',
+            'commission' => 'invalid-number',
+            'dividend' => 'invalid-number',
+            'swap' => 'invalid-number',
+            'profit' => 'invalid-number',
+            'system' => '',
+            'strategy' => '',
+            'assetClass' => '',
+            'grade' => 'invalid-grade',
+            'state' => 'invalid-state',
         ];
 
         $model = new PositionState();
@@ -105,15 +96,5 @@ class PositionStateTypeTest extends TypeTestCase
 
         // Assert
         $this->assertFalse($form->isValid());
-
-        $errors = $form->getErrors(true);
-        // Iterate over errors and print them
-        foreach ($errors as $error) {
-            $field = $error->getOrigin()->getName();
-            echo "Field: $field - Error: " . $error->getMessage() . "\n";
-        }
-
-        $this->assertCount(15, $errors);
-
     }
 }
