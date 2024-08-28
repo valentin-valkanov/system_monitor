@@ -28,6 +28,9 @@ class PositionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
 
+    /*The part below should be performed separately because of testing purposes. It could be tested in isolation.
+    Also, it doesn't cover the single responsibility principle because of the wto actions - first fetching data and then processing */
+
         $openPositions = [];
 
         foreach ($positions as $position) {
@@ -49,7 +52,6 @@ class PositionRepository extends ServiceEntityRepository
 
     public function findClosedPositionsForCurrentWeek(PositionDTOFactory $factory): array
     {
-
         [$startOfWeek, $endOfWeek] = DateUtils::getCurrentWeekRange();
 
         $positions = $this->createQueryBuilder('p')
@@ -62,6 +64,9 @@ class PositionRepository extends ServiceEntityRepository
             ->groupBy('p.id')
             ->getQuery()
             ->getResult();
+
+    /*The part below should be performed separately because of testing purposes. It could be tested in isolation.
+    Also, it doesn't cover the single responsibility principle because of the wto actions - first fetching data and then processing */
 
         $closedPositions = [];
 
@@ -76,6 +81,8 @@ class PositionRepository extends ServiceEntityRepository
         return $closedPositions;
     }
 
+    /*The part below should be performed separately because of testing purposes. It could be tested in isolation.
+    Also, it doesn't cover the single responsibility principle because of the wto actions - first fetching data and then processing */
     public function findAllClosedPositions(PositionDTOFactory $factory): array
     {
         // Fetch all positions with at least one state
