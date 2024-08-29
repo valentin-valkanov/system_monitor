@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace App\Tests\Factory;
+namespace App\Tests\Unit\Factory;
 
 use App\DTO\PositionDTO;
 use App\Entity\Position;
