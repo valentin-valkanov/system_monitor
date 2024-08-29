@@ -11,6 +11,13 @@ use PHPUnit\Framework\TestCase;
 
 class PositionTest extends TestCase
 {
+    public function testItCanBeInstantiated(): void
+    {
+        $position = new Position();
+
+        $this->assertInstanceOf(Position::class, $position);
+    }
+
     public function testConstructor(): void
     {
 

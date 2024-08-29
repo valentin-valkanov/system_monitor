@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for C:\Projects\system_monitor\src</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="_css/bootstrap.min.css?v=11.0.3" rel="stylesheet" type="text/css">
+  <link href="_css/nv.d3.min.css?v=11.0.3" rel="stylesheet" type="text/css">
+  <link href="_css/style.css?v=11.0.3" rel="stylesheet" type="text/css">
+  <link href="_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="index.html">C:\Projects\system_monitor\src</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Controller/DashboardController.php.html#16">App\Controller\DashboardController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/PlaybookController.php.html#9">App\Controller\PlaybookController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/PositionController.php.html#16">App\Controller\PositionController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/ReviewController.php.html#9">App\Controller\ReviewController</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Form/PositionType.php.html#13">App\Form\PositionType</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/PositionRepository.php.html#15">App\Repository\PositionRepository</a></td><td class="text-right">0%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Repository/PositionRepository.php.html#15">App\Repository\PositionRepository</a></td><td class="text-right">240</td></tr>
+       <tr><td><a href="Controller/DashboardController.php.html#16">App\Controller\DashboardController</a></td><td class="text-right">156</td></tr>
+       <tr><td><a href="Controller/PositionController.php.html#16">App\Controller\PositionController</a></td><td class="text-right">30</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Controller/DashboardController.php.html#18"><abbr title="App\Controller\DashboardController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/DashboardController.php.html#25"><abbr title="App\Controller\DashboardController::showWeeklyPositions">showWeeklyPositions</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/DashboardController.php.html#37"><abbr title="App\Controller\DashboardController::addPosition">addPosition</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/DashboardController.php.html#59"><abbr title="App\Controller\DashboardController::deletePosition">deletePosition</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/DashboardController.php.html#73"><abbr title="App\Controller\DashboardController::editPosition">editPosition</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/DashboardController.php.html#117"><abbr title="App\Controller\DashboardController::showPortfolioHeatMetrics">showPortfolioHeatMetrics</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/PlaybookController.php.html#11"><abbr title="App\Controller\PlaybookController::showPlaybooksList">showPlaybooksList</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/PositionController.php.html#18"><abbr title="App\Controller\PositionController::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/PositionController.php.html#24"><abbr title="App\Controller\PositionController::showAllPositions">showAllPositions</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/PositionController.php.html#34"><abbr title="App\Controller\PositionController::addPosition">addPosition</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Controller/ReviewController.php.html#11"><abbr title="App\Controller\ReviewController::showReviewsList">showReviewsList</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/PositionState.php.html#106"><abbr title="App\Entity\PositionState::getId">getId</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Form/PositionType.php.html#15"><abbr title="App\Form\PositionType::buildForm">buildForm</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Form/PositionType.php.html#47"><abbr title="App\Form\PositionType::configureOptions">configureOptions</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/PositionRepository.php.html#17"><abbr title="App\Repository\PositionRepository::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/PositionRepository.php.html#22"><abbr title="App\Repository\PositionRepository::findOpenPositions">findOpenPositions</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/PositionRepository.php.html#53"><abbr title="App\Repository\PositionRepository::findClosedPositionsForCurrentWeek">findClosedPositionsForCurrentWeek</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Repository/PositionRepository.php.html#86"><abbr title="App\Repository\PositionRepository::findAllClosedPositions">findAllClosedPositions</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Entity/Position.php.html#131"><abbr title="App\Entity\Position::getOpenPositionVolume">getOpenPositionVolume</abbr></a></td><td class="text-right">87%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Repository/PositionRepository.php.html#22"><abbr title="App\Repository\PositionRepository::findOpenPositions">findOpenPositions</abbr></a></td><td class="text-right">42</td></tr>
+       <tr><td><a href="Controller/DashboardController.php.html#73"><abbr title="App\Controller\DashboardController::editPosition">editPosition</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="Repository/PositionRepository.php.html#53"><abbr title="App\Repository\PositionRepository::findClosedPositionsForCurrentWeek">findClosedPositionsForCurrentWeek</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="Repository/PositionRepository.php.html#86"><abbr title="App\Repository\PositionRepository::findAllClosedPositions">findAllClosedPositions</abbr></a></td><td class="text-right">20</td></tr>
+       <tr><td><a href="Controller/DashboardController.php.html#37"><abbr title="App\Controller\DashboardController::addPosition">addPosition</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Controller/PositionController.php.html#34"><abbr title="App\Controller\PositionController::addPosition">addPosition</abbr></a></td><td class="text-right">12</td></tr>
+       <tr><td><a href="Entity/Position.php.html#131"><abbr title="App\Entity\Position::getOpenPositionVolume">getOpenPositionVolume</abbr></a></td><td class="text-right">6</td></tr>
+       <tr><td><a href="Controller/DashboardController.php.html#59"><abbr title="App\Controller\DashboardController::deletePosition">deletePosition</abbr></a></td><td class="text-right">6</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 11.0.3</a> using <a href="https://www.php.net/" target="_top">PHP 8.2.12</a> and <a href="https://phpunit.de/">PHPUnit 11.2.5</a> at Wed Aug 28 15:14:24 CEST 2024.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="_js/jquery.min.js?v=11.0.3" type="text/javascript"></script>
+  <script src="_js/d3.min.js?v=11.0.3" type="text/javascript"></script>
+  <script src="_js/nv.d3.min.js?v=11.0.3" type="text/javascript"></script>
+  <script type="text/javascript">
+$(document).ready(function() {
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#classCoverageDistribution svg')
+      .datum(getCoverageDistributionData([6,0,0,0,0,0,0,0,0,0,2,5], "Class Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.multiBarChart();
+    chart.tooltips(false)
+      .showControls(false)
+      .showLegend(false)
+      .reduceXTicks(false)
+      .staggerLabels(true)
+      .yAxis.tickFormat(d3.format('d'));
+
+    d3.select('#methodCoverageDistribution svg')
+      .datum(getCoverageDistributionData([18,0,0,0,0,0,0,0,0,1,0,70], "Method Coverage"))
+      .transition().duration(500).call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getCoverageDistributionData(data, label) {
+    var labels = [
+      '0%',
+      '0-10%',
+      '10-20%',
+      '20-30%',
+      '30-40%',
+      '40-50%',
+      '50-60%',
+      '60-70%',
+      '70-80%',
+      '80-90%',
+      '90-100%',
+      '100%'
+    ];
+    var values = [];
+    $.each(labels, function(key) {
+      values.push({x: labels[key], y: data[key]});
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Cyclomatic Complexity');
+
+    d3.select('#classComplexity svg')
+      .datum(getComplexityData([[0,12,"<a href=\"Controller\/DashboardController.php.html#16\">App\\Controller\\DashboardController<\/a>"],[0,1,"<a href=\"Controller\/PlaybookController.php.html#9\">App\\Controller\\PlaybookController<\/a>"],[0,5,"<a href=\"Controller\/PositionController.php.html#16\">App\\Controller\\PositionController<\/a>"],[0,1,"<a href=\"Controller\/ReviewController.php.html#9\">App\\Controller\\ReviewController<\/a>"],[100,19,"<a href=\"DTO\/PositionDTO.php.html#5\">App\\DTO\\PositionDTO<\/a>"],[98.55072463768117,42,"<a href=\"Entity\/Position.php.html#13\">App\\Entity\\Position<\/a>"],[97.82608695652173,33,"<a href=\"Entity\/PositionState.php.html#10\">App\\Entity\\PositionState<\/a>"],[100,2,"<a href=\"Factory\/PositionDTOFactory.php.html#8\">App\\Factory\\PositionDTOFactory<\/a>"],[100,2,"<a href=\"Form\/PositionStateType.php.html#14\">App\\Form\\PositionStateType<\/a>"],[0,2,"<a href=\"Form\/PositionType.php.html#13\">App\\Form\\PositionType<\/a>"],[100,0,"<a href=\"Kernel.php.html#8\">App\\Kernel<\/a>"],[0,15,"<a href=\"Repository\/PositionRepository.php.html#15\">App\\Repository\\PositionRepository<\/a>"],[100,1,"<a href=\"Utils\/DateUtils.php.html#4\">App\\Utils\\DateUtils<\/a>"]], 'Class Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.scatterChart()
+      .showDistX(true)
+      .showDistY(true)
+      .showLegend(false)
+      .forceX([0, 100]);
+    chart.tooltipContent(function(graph) {
+      return '<p>' + graph.point.class + '</p>';
+    });
+
+    chart.xAxis.axisLabel('Code Coverage (in percent)');
+    chart.yAxis.axisLabel('Method Complexity');
+
+    d3.select('#methodComplexity svg')
+      .datum(getComplexityData([[0,1,"<a href=\"Controller\/DashboardController.php.html#18\">App\\Controller\\DashboardController::__construct<\/a>"],[0,1,"<a href=\"Controller\/DashboardController.php.html#25\">App\\Controller\\DashboardController::showWeeklyPositions<\/a>"],[0,3,"<a href=\"Controller\/DashboardController.php.html#37\">App\\Controller\\DashboardController::addPosition<\/a>"],[0,2,"<a href=\"Controller\/DashboardController.php.html#59\">App\\Controller\\DashboardController::deletePosition<\/a>"],[0,4,"<a href=\"Controller\/DashboardController.php.html#73\">App\\Controller\\DashboardController::editPosition<\/a>"],[0,1,"<a href=\"Controller\/DashboardController.php.html#117\">App\\Controller\\DashboardController::showPortfolioHeatMetrics<\/a>"],[0,1,"<a href=\"Controller\/PlaybookController.php.html#11\">App\\Controller\\PlaybookController::showPlaybooksList<\/a>"],[0,1,"<a href=\"Controller\/PositionController.php.html#18\">App\\Controller\\PositionController::__construct<\/a>"],[0,1,"<a href=\"Controller\/PositionController.php.html#24\">App\\Controller\\PositionController::showAllPositions<\/a>"],[0,3,"<a href=\"Controller\/PositionController.php.html#34\">App\\Controller\\PositionController::addPosition<\/a>"],[0,1,"<a href=\"Controller\/ReviewController.php.html#11\">App\\Controller\\ReviewController::showReviewsList<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#26\">App\\DTO\\PositionDTO::__construct<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#68\">App\\DTO\\PositionDTO::getPositionId<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#73\">App\\DTO\\PositionDTO::getEntryLevel<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#78\">App\\DTO\\PositionDTO::getEntryTime<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#83\">App\\DTO\\PositionDTO::getSymbol<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#88\">App\\DTO\\PositionDTO::getType<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#93\">App\\DTO\\PositionDTO::getVolume<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#98\">App\\DTO\\PositionDTO::getStopLoss<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#103\">App\\DTO\\PositionDTO::getCommission<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#108\">App\\DTO\\PositionDTO::getExitTime<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#113\">App\\DTO\\PositionDTO::getExitLevel<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#118\">App\\DTO\\PositionDTO::getDividend<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#123\">App\\DTO\\PositionDTO::getSwap<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#128\">App\\DTO\\PositionDTO::getProfit<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#133\">App\\DTO\\PositionDTO::getSystem<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#138\">App\\DTO\\PositionDTO::getStrategy<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#143\">App\\DTO\\PositionDTO::getAssetClass<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#148\">App\\DTO\\PositionDTO::getGrade<\/a>"],[100,1,"<a href=\"DTO\/PositionDTO.php.html#153\">App\\DTO\\PositionDTO::getState<\/a>"],[100,1,"<a href=\"Entity\/Position.php.html#24\">App\\Entity\\Position::__construct<\/a>"],[100,1,"<a href=\"Entity\/Position.php.html#29\">App\\Entity\\Position::getId<\/a>"],[100,1,"<a href=\"Entity\/Position.php.html#34\">App\\Entity\\Position::getPositionStates<\/a>"],[100,2,"<a href=\"Entity\/Position.php.html#39\">App\\Entity\\Position::addPositionState<\/a>"],[100,4,"<a href=\"Entity\/Position.php.html#49\">App\\Entity\\Position::getLastState<\/a>"],[100,4,"<a href=\"Entity\/Position.php.html#62\">App\\Entity\\Position::getInitialState<\/a>"],[100,1,"<a href=\"Entity\/Position.php.html#75\">App\\Entity\\Position::getEntryTime<\/a>"],[100,4,"<a href=\"Entity\/Position.php.html#82\">App\\Entity\\Position::getEntryLevel<\/a>"],[100,4,"<a href=\"Entity\/Position.php.html#98\">App\\Entity\\Position::getExitLevel<\/a>"],[100,5,"<a href=\"Entity\/Position.php.html#115\">App\\Entity\\Position::getClosedPositionVolume<\/a>"],[87.5,6,"<a href=\"Entity\/Position.php.html#131\">App\\Entity\\Position::getOpenPositionVolume<\/a>"],[100,2,"<a href=\"Entity\/Position.php.html#150\">App\\Entity\\Position::calculateProfit<\/a>"],[100,2,"<a href=\"Entity\/Position.php.html#160\">App\\Entity\\Position::calculateSwap<\/a>"],[100,2,"<a href=\"Entity\/Position.php.html#170\">App\\Entity\\Position::calculateCommission<\/a>"],[100,3,"<a href=\"Entity\/Position.php.html#180\">App\\Entity\\Position::formatLevel<\/a>"],[0,1,"<a href=\"Entity\/PositionState.php.html#106\">App\\Entity\\PositionState::getId<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#111\">App\\Entity\\PositionState::getTime<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#116\">App\\Entity\\PositionState::setTime<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#122\">App\\Entity\\PositionState::getSymbol<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#127\">App\\Entity\\PositionState::setSymbol<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#134\">App\\Entity\\PositionState::getType<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#139\">App\\Entity\\PositionState::setType<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#146\">App\\Entity\\PositionState::getVolume<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#151\">App\\Entity\\PositionState::setVolume<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#158\">App\\Entity\\PositionState::getPriceLevel<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#163\">App\\Entity\\PositionState::setPriceLevel<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#169\">App\\Entity\\PositionState::getStopLoss<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#174\">App\\Entity\\PositionState::setStopLoss<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#181\">App\\Entity\\PositionState::getCommission<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#186\">App\\Entity\\PositionState::setCommission<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#192\">App\\Entity\\PositionState::getDividend<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#197\">App\\Entity\\PositionState::setDividend<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#204\">App\\Entity\\PositionState::getSwap<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#209\">App\\Entity\\PositionState::setSwap<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#216\">App\\Entity\\PositionState::getProfit<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#221\">App\\Entity\\PositionState::setProfit<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#228\">App\\Entity\\PositionState::getSystem<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#233\">App\\Entity\\PositionState::setSystem<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#240\">App\\Entity\\PositionState::getStrategy<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#245\">App\\Entity\\PositionState::setStrategy<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#252\">App\\Entity\\PositionState::getAssetClass<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#257\">App\\Entity\\PositionState::setAssetClass<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#264\">App\\Entity\\PositionState::getGrade<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#269\">App\\Entity\\PositionState::setGrade<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#276\">App\\Entity\\PositionState::getState<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#281\">App\\Entity\\PositionState::setState<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#287\">App\\Entity\\PositionState::getPosition<\/a>"],[100,1,"<a href=\"Entity\/PositionState.php.html#292\">App\\Entity\\PositionState::setPosition<\/a>"],[100,1,"<a href=\"Factory\/PositionDTOFactory.php.html#10\">App\\Factory\\PositionDTOFactory::createFieldsForClosedPosition<\/a>"],[100,1,"<a href=\"Factory\/PositionDTOFactory.php.html#45\">App\\Factory\\PositionDTOFactory::createForOpenPosition<\/a>"],[100,1,"<a href=\"Form\/PositionStateType.php.html#16\">App\\Form\\PositionStateType::buildForm<\/a>"],[100,1,"<a href=\"Form\/PositionStateType.php.html#55\">App\\Form\\PositionStateType::configureOptions<\/a>"],[0,1,"<a href=\"Form\/PositionType.php.html#15\">App\\Form\\PositionType::buildForm<\/a>"],[0,1,"<a href=\"Form\/PositionType.php.html#47\">App\\Form\\PositionType::configureOptions<\/a>"],[0,1,"<a href=\"Repository\/PositionRepository.php.html#17\">App\\Repository\\PositionRepository::__construct<\/a>"],[0,6,"<a href=\"Repository\/PositionRepository.php.html#22\">App\\Repository\\PositionRepository::findOpenPositions<\/a>"],[0,4,"<a href=\"Repository\/PositionRepository.php.html#53\">App\\Repository\\PositionRepository::findClosedPositionsForCurrentWeek<\/a>"],[0,4,"<a href=\"Repository\/PositionRepository.php.html#86\">App\\Repository\\PositionRepository::findAllClosedPositions<\/a>"],[100,1,"<a href=\"Utils\/DateUtils.php.html#6\">App\\Utils\\DateUtils::getCurrentWeekRange<\/a>"]], 'Method Complexity'))
+      .transition()
+      .duration(500)
+      .call(chart);
+
+    nv.utils.windowResize(chart.update);
+
+    return chart;
+  });
+
+  function getComplexityData(data, label) {
+    var values = [];
+    $.each(data, function(key) {
+      var value = Math.round(data[key][0]*100) / 100;
+      values.push({
+        x: value,
+        y: data[key][1],
+        class: data[key][2],
+        size: 0.05,
+        shape: 'diamond'
+      });
+    });
+
+    return [
+      {
+        key: label,
+        values: values,
+        color: "#4572A7"
+      }
+    ];
+  }
+});
+  </script>
+ </body>
+</html>

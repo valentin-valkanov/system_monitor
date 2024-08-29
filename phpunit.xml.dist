@@ -23,8 +23,12 @@
         </testsuite>
     </testsuites>
 
-    <coverage>
-    </coverage>
+    <coverage/>
+    <source>
+        <include>
+            <directory suffix=".php">src</directory>
+        </include>
+    </source>
 
     <extensions>
     </extensions>
