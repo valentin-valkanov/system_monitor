@@ -152,6 +152,9 @@ class Position
         $profit = 0;
         foreach($this->getPositionStates() as $state){
             $profit += $state->getProfit();
+            if($state->getState() == 'closed'){
+                break;
+            }
         }
 
         return $profit;
@@ -162,6 +165,9 @@ class Position
         $swap = 0;
         foreach($this->getPositionStates() as $state){
             $swap += $state->getSwap();
+            if($state->getState() == 'closed'){
+                break;
+            }
         }
 
         return $swap;
@@ -172,9 +178,23 @@ class Position
         $commission = 0;
         foreach($this->getPositionStates() as $state){
             $commission += $state->getCommission();
+            if($state->getState() == 'closed'){
+                break;
+            }
         }
 
         return $commission;
+    }
+
+    public function calculateStopLevel()
+    {
+        $stopLevel = 0;
+        if($this->getLastState()== 'closed'){
+            $stopLevel = $this->getInitialState()->getStopLoss();
+            return $stopLevel;
+        }
+        $stopLevel = $this->getLastState()->getStopLoss();
+        return $stopLevel;
     }
 
     private function formatLevel(float $level, PositionState $state): float

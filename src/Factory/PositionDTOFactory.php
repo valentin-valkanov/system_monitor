@@ -19,6 +19,7 @@ class PositionDTOFactory
         $profit = $position->calculateProfit();
         $swap = $position->calculateSwap();
         $commission = $position->calculateCommission();
+        $stopLoss = $position->calculateStopLevel();
 
         return  new PositionDTO(
             $position->getId(),
@@ -27,7 +28,7 @@ class PositionDTOFactory
             $state->getSymbol(),
             $state->getType(),
             $volume,
-            $state->getStopLoss(),
+            $stopLoss,
             $commission,
             $exitTime,
             $exitLevel,
