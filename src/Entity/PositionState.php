@@ -86,7 +86,7 @@ class PositionState
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "State cannot be blank.")]
     #[Assert\Choice(
-        choices: [self::STATE_OPENED, self::STATE_CLOSED, self::STATE_PARTIALLY_CLOSED, self::STATE_SCALE_IN],
+        choices: [self::STATE_OPENED, self::STATE_CLOSED, self::SCALE_OUT, self::STATE_SCALE_IN],
         message: "Choose a valid state.")]
     private ?string $state = null;
 
@@ -95,7 +95,7 @@ class PositionState
     private ?Position $position = null;
 
     public const STATE_OPENED = 'opened';
-    public const STATE_PARTIALLY_CLOSED = 'partially_closed';
+    public const SCALE_OUT = 'scale_out';
     public const STATE_SCALE_IN = 'scale_in';
     public const STATE_CLOSED = 'closed';
     public const GRADE_NONE = 'none';

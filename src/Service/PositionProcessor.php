@@ -48,7 +48,7 @@ class PositionProcessor
     {
         return in_array($state, [
             PositionState::STATE_OPENED,
-            PositionState::STATE_PARTIALLY_CLOSED,
+            PositionState::SCALE_OUT,
             PositionState::STATE_SCALE_IN,
         ], true);
     }

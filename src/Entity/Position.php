@@ -102,7 +102,7 @@ class Position
 
         foreach ( $this->getPositionStates() as $state){
 
-            if ($state->getState() === PositionState::STATE_PARTIALLY_CLOSED || $state->getState() === PositionState::STATE_CLOSED){
+            if ($state->getState() === PositionState::SCALE_OUT || $state->getState() === PositionState::STATE_CLOSED){
                 $currentExitLevel = $state->getPriceLevel() * $state->getVolume();
                 $combinedExitLevel += $currentExitLevel;
                 $combinedVolume += $state->getVolume();
@@ -132,13 +132,13 @@ class Position
     {
         $volume = $this->getInitialState()->getVolume();
 
-        if ($this->getLastState()->getState() === PositionState::STATE_SCALE_IN || $this->getLastState()->getState() === PositionState::STATE_PARTIALLY_CLOSED){
+        if ($this->getLastState()->getState() === PositionState::STATE_SCALE_IN || $this->getLastState()->getState() === PositionState::SCALE_OUT){
 
             foreach ($this->getPositionStates() as $state){
                 if($state->getState() === PositionState::STATE_SCALE_IN){
                     $volume += $state->getVolume();
                 }
-                if ($state->getState() === PositionState::STATE_PARTIALLY_CLOSED){
+                if ($state->getState() === PositionState::SCALE_OUT){
                     $volume -= $state->getVolume();
                 }
             }
