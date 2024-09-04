@@ -11,12 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class PositionTest extends TestCase
 {
-    public function testItCanBeInstantiated(): void
-    {
-        $position = new Position();
-
-        $this->assertInstanceOf(Position::class, $position);
-    }
 
     public function testConstructor(): void
     {
@@ -77,7 +71,8 @@ class PositionTest extends TestCase
         //Setup
         $states = [
             ['time' => '2024-06-03 12:00', 'state' => 'opened', ],
-            ['time' => '2024-06-04 12:00', 'state' => 'opened', ]
+            ['time' => '2024-06-04 12:00', 'state' => 'opened', ],
+            ['time' => '2024-06-05 12:00', 'state' => 'closed', ]
         ];
 
         $position = $this->createPositionWithStates($states);
@@ -169,8 +164,8 @@ class PositionTest extends TestCase
         //Setup
         $statesWithPartiallyClosedState = [
             ['time' => '2024-06-03 12:00', 'state' => 'opened', 'priceLevel' => 1, 'volume' => 2],
-            ['time' => '2024-06-03 12:00', 'state' => 'partially_closed', 'priceLevel' => 2, 'volume' => 0.7],
-            ['time' => '2024-06-03 12:00', 'state' => 'partially_closed', 'priceLevel' => 3, 'volume' => 0.7],
+            ['time' => '2024-06-03 12:00', 'state' => 'scale_out', 'priceLevel' => 2, 'volume' => 0.7],
+            ['time' => '2024-06-03 12:00', 'state' => 'scale_out', 'priceLevel' => 3, 'volume' => 0.7],
             ['time' => '2024-06-04 12:00', 'state' => 'closed', 'priceLevel' => 4, 'volume' => 0.6],
         ];
 
@@ -289,6 +284,39 @@ class PositionTest extends TestCase
         $this->assertEquals(2, $commission);
     }
 
+    public function testCalculateStopLevel()
+    {
+        // Setup case where the last state is "closed"
+        $statesWithClosedState = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', 'stopLoss' => 1.1000],
+            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', 'stopLoss' => 1.2000],
+            ['time' => '2024-06-05 12:00', 'state' => 'closed', 'stopLoss' => 1.3000],
+        ];
+
+        $positionWithClosedState = $this->createPositionWithStates($statesWithClosedState);
+
+        // Do something
+        $stopLevelWhenClosed = $positionWithClosedState->calculateStopLevel();
+
+        // Make assertions - should return the stop loss of the initial state when the position is closed
+        $this->assertEquals(1.1000, $stopLevelWhenClosed);
+
+        // Setup case where the last state is not "closed"
+        $statesWithoutClosedState = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', 'stopLoss' => 1.1000],
+            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', 'stopLoss' => 1.2000],
+            ['time' => '2024-06-05 12:00', 'state' => 'scale_in', 'stopLoss' => 1.3000],
+        ];
+
+        $positionWithoutClosedState = $this->createPositionWithStates($statesWithoutClosedState);
+
+        // Do something
+        $stopLevelWhenNotClosed = $positionWithoutClosedState->calculateStopLevel();
+
+        // Make assertions - should return the stop loss of the last state when the position is not closed
+        $this->assertEquals(1.3000, $stopLevelWhenNotClosed);
+    }
+
 
     private function createPositionWithStates(array $states): Position
     {
@@ -317,6 +345,9 @@ class PositionTest extends TestCase
             }
             if(isset($stateData['symbol'])){
                 $state->setSymbol($stateData['symbol']);
+            }
+            if (isset($stateData['stopLoss'])) {
+                $state->setStopLoss($stateData['stopLoss']);
             }
             $position->addPositionState($state);
         }

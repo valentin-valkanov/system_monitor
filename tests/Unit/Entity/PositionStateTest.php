@@ -96,7 +96,7 @@ class PositionStateTest extends TestCase
     public function testConstants()
     {
         $this->assertSame('opened', PositionState::STATE_OPENED);
-        $this->assertSame('partially_closed', PositionState::SCALE_OUT);
+        $this->assertSame('scale_out', PositionState::SCALE_OUT);
         $this->assertSame('scale_in', PositionState::STATE_SCALE_IN);
         $this->assertSame('closed', PositionState::STATE_CLOSED);
 

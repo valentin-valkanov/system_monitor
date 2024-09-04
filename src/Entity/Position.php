@@ -186,15 +186,18 @@ class Position
         return $commission;
     }
 
-    public function calculateStopLevel()
+    public function calculateStopLevel(): float
     {
         $stopLevel = 0;
-        if($this->getLastState()== 'closed'){
+
+        if($this->getLastState()->getState() ==='closed'){
             $stopLevel = $this->getInitialState()->getStopLoss();
             return $stopLevel;
         }
         $stopLevel = $this->getLastState()->getStopLoss();
+
         return $stopLevel;
+
     }
 
     private function formatLevel(float $level, PositionState $state): float

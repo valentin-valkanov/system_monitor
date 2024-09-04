@@ -25,11 +25,11 @@ class PositionDTOFactoryTest extends TestCase
         $position->method('calculateSwap')->willReturn(0.5);
         $position->method('calculateCommission')->willReturn(10.0);
         $position->method('getId')->willReturn(1);
+        $position->method('calculateStopLevel')->willReturn(1.2000);
 
         $state->method('getSymbol')->willReturn('EURUSD');
         $state->method('getType')->willReturn('BUY');
         $state->method('getTime')->willReturn(new \DateTimeImmutable('2024-07-04 12:00'));
-        $state->method('getStopLoss')->willReturn(1.2000);
         $state->method('getDividend')->willReturn(5.0);
         $state->method('getSystem')->willReturn('System1');
         $state->method('getStrategy')->willReturn('Strategy1');
