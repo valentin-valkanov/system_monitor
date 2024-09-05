@@ -70,8 +70,8 @@ class DashboardController extends AbstractController
         return $this->redirectToRoute('app_dashboard');
     }
 
-    #[Route('/position/edit/{positionId}', name: 'app_position_edit')]
-    public function editPosition(Request $request, int $positionId): Response
+    #[Route('/position/update/{positionId}', name: 'app_position_update')]
+    public function updatePosition(Request $request, int $positionId): Response
     {
         $position = $this->entityManager->getRepository(Position::class)->find($positionId);
 
