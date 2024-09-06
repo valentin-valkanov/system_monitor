@@ -81,6 +81,13 @@ class DashboardController extends AbstractController
 
         $lastState = $position->getLastState();
 
+        if ($lastState->getState() === PositionState::STATE_CLOSED) {
+            // You can display an error message or redirect to another page
+            $this->addFlash('error', 'This position is closed and cannot be updated further.');
+
+            return $this->redirectToRoute('app_closed_position_show_all');
+        }
+
         $newPositionState = new PositionState();
         $newPositionState->setTime($lastState->getTime());
         $newPositionState->setSymbol($lastState->getSymbol());

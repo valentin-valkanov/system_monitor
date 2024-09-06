@@ -13,6 +13,15 @@
         <p class="mb-4">List of all closed positions</p>
     </div>
 
+    <!-- Flash Messages -->
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
     <div class="text-right mb-4">
         <a href="{{ path('app_position_add') }}" class="btn btn-primary">Add Position</a>
     </div>
