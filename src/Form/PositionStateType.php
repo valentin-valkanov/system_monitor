@@ -48,8 +48,7 @@ class PositionStateType extends AbstractType
                     'Scale_In' => PositionState::STATE_SCALE_IN,
                     'Closed' => PositionState::STATE_CLOSED,
                 ],
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -162,7 +162,7 @@ class Position
 
     public function calculateSwap(): float
     {
-        $swap = 0;
+        $swap = 0.0;
         foreach($this->getPositionStates() as $state){
             $swap += $state->getSwap();
             if($state->getState() == 'closed'){

@@ -106,11 +106,11 @@ class DashboardController extends AbstractController
         $newPositionState->setState($lastState->getState());
 
 
-        $form = $this->createForm(PositionStateType::class, $newPositionState);
+        $form = $this->createForm(PositionStateType::class, $newPositionState,);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            if ($lastState->getTime()->format('Y-m-d') === $newPositionState->getTime()->format('Y-m-d')) {
+            if ($lastState->getTime()->format('Y-m-d') === $newPositionState->getTime()->format('Y-m-d')) { //to consider <== instead ===
                 $this->addFlash('error', 'A new state cannot be added with the same date as the last state.');
                 return $this->redirectToRoute('app_closed_position_show_all');
             }

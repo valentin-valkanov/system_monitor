@@ -12,6 +12,9 @@ class PositionStateTest extends TestCase
     {
         $positionState = new PositionState();
 
+        // Assert that ID is null before persistence
+        $this->assertNull($positionState->getId());
+
         // Test setting and getting time
         $time = new \DateTimeImmutable('2024-07-04 12:00');
         $positionState->setTime($time);

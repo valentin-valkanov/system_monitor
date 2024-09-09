@@ -214,6 +214,7 @@ class PositionTest extends TestCase
             ['time' => '2024-06-03 12:00', 'state' => 'opened', 'priceLevel' => 2, 'volume' => 1],
             ['time' => '2024-06-04 12:00', 'state' => 'scale_in', 'priceLevel' => 2.5, 'volume' => 1.5],
             ['time' => '2024-06-04 13:00', 'state' => 'scale_in', 'priceLevel' => 3, 'volume' => 2.0],
+            ['time' => '2024-06-05 13:00', 'state' => 'scale_out', 'priceLevel' => 4, 'volume' => 2.0],
 
         ];
 
@@ -224,7 +225,7 @@ class PositionTest extends TestCase
 
         //Make Assertion
 
-        $this->assertEquals(4.5, $volume);
+        $this->assertEquals(2.5, $volume);
     }
 
     public function testCalculateProfit()
@@ -255,14 +256,23 @@ class PositionTest extends TestCase
             ['time' => '2024-06-05 12:00', 'state' => 'scale_in', 'swap' => 2],
         ];
 
+        $states2 = [
+            ['time' => '2024-06-03 12:00', 'state' => 'opened', 'swap' => 0],
+            ['time' => '2024-06-04 12:00', 'state' => 'scale_in', 'swap' => 1],
+            ['time' => '2024-06-05 12:00', 'state' => 'closed', 'swap' => 3],
+        ];
+
         $position = $this->createPositionWithStates($states);
+        $position2 = $this->createPositionWithStates($states2);
 
         //Do Something
-        $swap = $position->calculateSwap();
+        $swapForOpenPosition = $position->calculateSwap();
+        $swapForClosedPosition = $position2->calculateSwap();
 
         //Make Assertions
 
-        $this->assertEquals(3, $swap);
+        $this->assertEquals(3, $swapForOpenPosition, 'Swap calculation for open position failed');
+        $this->assertEquals(4, $swapForClosedPosition, 'Swap calculation for closed position failed');
     }
 
     public function testCalculateCommission()
