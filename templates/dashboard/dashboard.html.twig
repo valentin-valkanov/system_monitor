@@ -12,6 +12,15 @@
         <p class="mb-4">Positions for the current week. Portfolio heat. Returns.</p>
     </div>
 
+    {# Flash messages #}
+    {% for label, messages in app.flashes %}
+        <div class="alert alert-{{ label }}">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
     <div class="text-right mb-4">
         <a href="{{ path('app_position_add') }}" class="btn btn-primary">Add Position</a>
     </div>
@@ -64,7 +73,7 @@
                             <td>{{ closedPosition.grade }}</td>
                             <td>{{ closedPosition.state }}</td>
                             <td>
-                                <a href="{{ path('app_position_update', {'positionId': closedPosition.getPositionId}) }}" class="btn btn-primary btn-sm">Update</a>
+                                <a href="{{ path('app_position_update', {'positionId': closedPosition.getPositionId, 'context': 'dashboard'}) }}" class="btn btn-primary btn-sm">Update</a>
                                 <form action="{{ path('app_position_delete', {'positionId': closedPosition.getPositionId}) }}" method="post">
                                     <button type="submit" class="btn btn-danger">Delete</button>
                                 </form>

@@ -7,6 +7,7 @@ use App\Entity\PositionState;
 use App\Factory\PositionDTOFactory;
 use App\Form\PositionStateType;
 use App\Repository\PositionRepository;
+use App\Utils\DateUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,21 +74,32 @@ class DashboardController extends AbstractController
     #[Route('/position/update/{positionId}', name: 'app_position_update')]
     public function updatePosition(Request $request, int $positionId): Response
     {
+        // Get the context (dashboard or positions) from the query parameter
+        $context = $request->query->get('context', 'dashboard'); // Default to 'dashboard' if no context is provided
+
         $position = $this->entityManager->getRepository(Position::class)->find($positionId);
 
-        if(!$position){
+        if (!$position) {
             throw $this->createNotFoundException('Position not found');
         }
 
         $lastState = $position->getLastState();
 
+        // Check if the position is closed
         if ($lastState->getState() === PositionState::STATE_CLOSED) {
-            // You can display an error message or redirect to another page
             $this->addFlash('error', 'This position is closed and cannot be updated further.');
 
-            return $this->redirectToRoute('app_closed_position_show_all');
+            // Determine which page to redirect back to, based on the context
+            if ($context === 'dashboard') {
+                // Redirect to dashboard
+                return $this->redirectToRoute('app_dashboard');
+            } else {
+                // Redirect to positions page
+                return $this->redirectToRoute('app_closed_position_show_all');
+            }
         }
 
+        // Handle the case when the position is not closed (continue updating)
         $newPositionState = new PositionState();
         $newPositionState->setTime($lastState->getTime());
         $newPositionState->setSymbol($lastState->getSymbol());
@@ -105,27 +117,29 @@ class DashboardController extends AbstractController
         $newPositionState->setGrade($lastState->getGrade());
         $newPositionState->setState($lastState->getState());
 
-
-        $form = $this->createForm(PositionStateType::class, $newPositionState,);
+        $form = $this->createForm(PositionStateType::class, $newPositionState);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
-            if ($lastState->getTime()->format('Y-m-d') === $newPositionState->getTime()->format('Y-m-d')) { //to consider <== instead ===
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($lastState->getTime()->format('Y-m-d') === $newPositionState->getTime()->format('Y-m-d')) {
                 $this->addFlash('error', 'A new state cannot be added with the same date as the last state.');
-                return $this->redirectToRoute('app_closed_position_show_all');
+                return $this->render('position/edit_position.html.twig', [
+                    'form' => $form->createView(),
+                ]);
             }
 
             $position->addPositionState($newPositionState);
             $this->entityManager->persist($newPositionState);
             $this->entityManager->flush();
-            return $this->redirectToRoute('app_dashboard');
+
+            return $this->redirectToRoute('app_dashboard'); // Adjust this redirection as needed
         }
 
         return $this->render('position/edit_position.html.twig', [
             'form' => $form->createView(),
         ]);
-
     }
+
 
     public function showPortfolioHeatMetrics()
     {

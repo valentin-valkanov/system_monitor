@@ -75,7 +75,7 @@
                         <td>{{ closedPosition.state }}</td>
 
                         <td>
-                            <a href="{{ path('app_position_update', {'positionId': closedPosition.getPositionId}) }}" class="btn btn-primary btn-sm">Update</a>
+                            <a href="{{ path('app_position_update', {'positionId': closedPosition.getPositionId, 'context': 'positions'}) }}" class="btn btn-primary btn-sm">Update</a>
                             <form action="{{ path('app_position_delete', {'positionId': closedPosition.getPositionId}) }}" method="post">
                                 <button type="submit" class="btn btn-danger">Delete</button>
                             </form>

@@ -30,29 +30,4 @@ class PositionController extends AbstractController
             'closedPositions' => $closedPositions,
         ]);
     }
-
-    #[Route('/position/add', name: 'app_position_add')]
-    public function addPosition(Request $request): Response
-    {
-        $positionState = new PositionState();
-        $position = new Position($positionState);
-        $form = $this->createForm(PositionStateType::class, $positionState);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $this->entityManager->persist($position);
-            $this->entityManager->flush();
-
-            $positionState->setPosition($position);
-            $this->entityManager->persist($positionState);
-            $this->entityManager->flush();
-
-            return $this->redirectToRoute('app_closed_position_show_all');
-        }
-
-        return $this->render('position/add_position.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
 }
