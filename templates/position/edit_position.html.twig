@@ -7,6 +7,12 @@
         <h1 class="text-3xl">Update Position</h1>
     </div>
 
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
     <div class="text-left bg-white p-4 rounded-md shadow-md mt-8" style="max-width: 600px; margin: auto;">
         {{ form_start(form) }}
         {{ form_row(form.time) }}
