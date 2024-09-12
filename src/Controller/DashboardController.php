@@ -57,18 +57,14 @@ class DashboardController extends AbstractController
         ]);
     }
 
-    #[Route('/position/delete/{positionId}', name: 'app_position_delete')]
-    public function deletePosition(Request $request, int $positionId): Response
+    #[Route('/position/history/{positionId}', name: 'app_position_timeline')]
+    public function showPositionTimeline(Request $request, int $positionId): Response
     {
-        $position = $this->entityManager->getRepository(Position::class)->find($positionId);
+        $position = $this->entityManager->getRepository(Position::class)->findPositionWithStates($positionId);
 
-        if(!$position){
-            throw $this->createNotFoundException('Position not found');
-        }
-        $this->entityManager->remove($position);
-        $this->entityManager->flush();
-
-        return $this->redirectToRoute('app_dashboard');
+        return $this->render('position/show_position_timeline.html.twig', [
+            'position' => $position,
+        ]);
     }
 
     #[Route('/position/update/{positionId}', name: 'app_position_update')]
@@ -123,7 +119,7 @@ class DashboardController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($lastState->getTime()->format('Y-m-d') <= $newPositionState->getTime()->format('Y-m-d')) {
                 $this->addFlash('error', 'The new state time cannot be the same or earlier than the last state time.');
-                return $this->render('position/edit_position.html.twig', [
+                return $this->render('position/update_position.html.twig', [
                     'form' => $form->createView(),
                 ]);
             }
@@ -135,32 +131,28 @@ class DashboardController extends AbstractController
             return $this->redirectToRoute('app_dashboard'); // Adjust this redirection as needed
         }
 
-        return $this->render('position/edit_position.html.twig', [
+        return $this->render('position/update_position.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
-
-    public function showPortfolioHeatMetrics()
+    #[Route('/position/edit/{positionId}', name: 'app_position_edit')]
+    public function editPosition()
     {
-        $combinedRisk = $this->portfolioHeat->findCombinedRisk();
-        $combinedRiskPercent = $this->portfolioHeat->findCombinedRiskPercent($accountBalance);
-        $totalOpenPositions = $this->portfolioHeat->findTotalOpenPositions();
-        $newTrades = count($this->positionStateRepository->findNewTrades());
-        $closedTrades = count($this->positionStateRepository->findClosedPositionsForCurrentWeek());
-        $closedPnL = $this->portfolioHeat->getClosedPnL();
-        $openPnL = $this->portfolioHeat->getOpenPnL();
-        $account = $accountBalance + $closedPnL;
+        return $this->render('position/edit_position.html.twig');
+    }
 
-        return$this->render('dashboard/dashboard.html.twig', [
-            'combinedRisk' => $combinedRisk,
-            'combinedRiskPercent' => $combinedRiskPercent,
-            'totalOpenPositions' => $totalOpenPositions,
-            'newTrades' => $newTrades,
-            'closedTrades' => $closedTrades,
-            'closedPnL' => $closedPnL,
-            'openPnL' => $openPnL,
-            'account' => $account
-        ]);
+    #[Route('/position/delete/{positionId}', name: 'app_position_delete')]
+    public function deletePosition(Request $request, int $positionId): Response
+    {
+        $position = $this->entityManager->getRepository(Position::class)->find($positionId);
+
+        if(!$position){
+            throw $this->createNotFoundException('Position not found');
+        }
+        $this->entityManager->remove($position);
+        $this->entityManager->flush();
+
+        return $this->redirectToRoute('app_dashboard');
     }
 }

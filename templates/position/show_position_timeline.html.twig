@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Position History {% endblock %}
+
+{% block body %}
+
+    <div class="text-center page-header">
+        <h1 class="text-3xl">History for Position</h1>
+        {% if position.positionStates|length > 0 %}
+            <p class="mb-4">Timeline for position {{ position.positionStates[0].symbol }}.</p>
+        {% else %}
+            <p class="mb-4">No symbol available for this position.</p>
+        {% endif %}
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Time</th>
+            <th>Symbol</th>
+            <th>Type</th>
+            <th>System</th>
+            <th>Strategy</th>
+            <th>Volume</th>
+            <th>Price Level</th>
+            <th>Stop Loss</th>
+            <th>Commission</th>
+            <th>Dividend</th>
+            <th>Swap</th>
+            <th>Profit</th>
+            <th>State</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for state in position.positionStates %}
+            <tr>
+                <td>{{ state.time|date('Y-m-d H:i:s') }}</td>
+                <td>{{ state.symbol }}</td>
+                <td>{{ state.type }}</td>
+                <td>{{ state.system }}</td>
+                <td>{{ state.strategy }}</td>
+                <td>{{ state.volume }}</td>
+                <td>{{ state.priceLevel }}</td>
+                <td>{{ state.stopLoss }}</td>
+                <td>{{ state.commission }}</td>
+                <td>{{ state.dividend }}</td>
+                <td>{{ state.swap }}</td>
+                <td>{{ state.profit }}</td>
+                <td>{{ state.state }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="13">No history available for this position.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+{% endblock %}

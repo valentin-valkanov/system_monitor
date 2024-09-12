@@ -61,4 +61,15 @@ class PositionRepository extends ServiceEntityRepository
 
         return $this->processor->processClosedPositions($positions);
     }
+
+    public function findPositionWithStates(int $positionId): ?Position
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.positionStates', 'ps') // Eager load position states
+            ->addSelect('ps') // Ensure position states are included in the result
+            ->where('p.id = :positionId')
+            ->setParameter('positionId', $positionId)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

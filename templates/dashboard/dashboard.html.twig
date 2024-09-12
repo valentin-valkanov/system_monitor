@@ -73,11 +73,21 @@
                             <td>{{ closedPosition.grade }}</td>
                             <td>{{ closedPosition.state }}</td>
                             <td>
-                                <a href="{{ path('app_position_update', {'positionId': closedPosition.getPositionId, 'context': 'dashboard'}) }}" class="btn btn-primary btn-sm">Update</a>
-                                <form action="{{ path('app_position_delete', {'positionId': closedPosition.getPositionId}) }}" method="post">
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
-                            </td>
+                                <<div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                                        Action
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ path('app_position_timeline', {'positionId': closedPosition.getPositionId}) }}">History</a></li>
+                                        <li><a class="dropdown-item" href="{{ path('app_position_update', {'positionId': closedPosition.getPositionId, 'context': 'dashboard'}) }}">Update</a></li>
+                                        <li><a class="dropdown-item" href="{{ path('app_position_edit', {'positionId': closedPosition.getPositionId}) }}">Edit</a></li>
+                                        <li>
+                                            <form action="{{ path('app_position_delete', {'positionId': closedPosition.getPositionId}) }}" method="post">
+                                                <button type="submit" class="dropdown-item">Delete</button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
                         </tr>
                     {% endfor %}
                 </tbody>
