@@ -117,7 +117,7 @@ class DashboardController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($lastState->getTime()->format('Y-m-d') <= $newPositionState->getTime()->format('Y-m-d')) {
+            if ($lastState->getTime()->format('Y-m-d') >= $newPositionState->getTime()->format('Y-m-d')) {
                 $this->addFlash('error', 'The new state time cannot be the same or earlier than the last state time.');
                 return $this->render('position/update_position.html.twig', [
                     'form' => $form->createView(),

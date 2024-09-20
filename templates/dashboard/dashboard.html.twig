@@ -1,8 +1,4 @@
 {% extends 'base.html.twig' %}
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-    <link rel="stylesheet" href="{{ asset('styles/table_styles.css') }}">
-{% endblock %}
 
 {% block title %}Dashboard{% endblock %}
 
@@ -14,7 +10,15 @@
 
     {# Flash messages #}
     {% for label, messages in app.flashes %}
-        <div class="alert alert-{{ label }}">
+        {% set alertClasses = '' %}
+        {% if label == 'success' %}
+            {% set alertClasses = 'p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 flash-message' %}
+        {% elseif label == 'error' %}
+            {% set alertClasses = 'p-4 mb-4 text-sm text-red-100 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 flash-message' %}
+        {% endif %}
+
+        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-red-900 flash-message" style="background-color: #ff4d4d;" role="alert">
+            <span class="font-medium">{{ label|capitalize }} alert!</span>
             {% for message in messages %}
                 <p>{{ message }}</p>
             {% endfor %}
@@ -73,21 +77,19 @@
                             <td>{{ closedPosition.grade }}</td>
                             <td>{{ closedPosition.state }}</td>
                             <td>
-                                <<div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                                        Action
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{{ path('app_position_timeline', {'positionId': closedPosition.getPositionId}) }}">History</a></li>
-                                        <li><a class="dropdown-item" href="{{ path('app_position_update', {'positionId': closedPosition.getPositionId, 'context': 'dashboard'}) }}">Update</a></li>
-                                        <li><a class="dropdown-item" href="{{ path('app_position_edit', {'positionId': closedPosition.getPositionId}) }}">Edit</a></li>
-                                        <li>
-                                            <form action="{{ path('app_position_delete', {'positionId': closedPosition.getPositionId}) }}" method="post">
-                                                <button type="submit" class="dropdown-item">Delete</button>
-                                            </form>
-                                        </li>
-                                    </ul>
+                                <div class="dropdown">
+                                    <button class="dropbtn">Actions</button>
+                                    <div class="dropdown-content">
+                                        <a href="{{ path('app_position_timeline', {'positionId': closedPosition.getPositionId}) }}">History</a>
+                                        <a href="{{ path('app_position_update', {'positionId': closedPosition.getPositionId, 'context': 'dashboard'}) }}">Update</a>
+                                        <a href="{{ path('app_position_edit', {'positionId': closedPosition.getPositionId}) }}">Edit</a>
+                                        <form action="{{ path('app_position_delete', {'positionId': closedPosition.getPositionId}) }}" method="post">
+                                            <button type="submit" class="dropdown-item">Delete</button>
+                                        </form>
+                                    </div>
                                 </div>
+                            </td>
+
                         </tr>
                     {% endfor %}
                 </tbody>
