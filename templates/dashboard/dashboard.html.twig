@@ -17,7 +17,8 @@
             {% set alertClasses = 'p-4 mb-4 text-sm text-red-100 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 flash-message' %}
         {% endif %}
 
-        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-red-900 flash-message" style="background-color: #ff4d4d;" role="alert">
+        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-100 dark:bg-red-900 flash-message"
+             style="background-color: #ff4d4d;" role="alert">
             <span class="font-medium">{{ label|capitalize }} alert!</span>
             {% for message in messages %}
                 <p>{{ message }}</p>
@@ -29,143 +30,159 @@
         <a href="{{ path('app_position_add') }}" class="btn btn-primary">Add Position</a>
     </div>
 
-        <div class="overflow-x-auto">
-            <div class="table-container">
-                <h4 class="text-2xl font-semibold mb-2">Closed Positions</h4>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Entry Time</th>
-                            <th>Symbol</th>
-                            <th>Type</th>
-                            <th>Vol</th>
-                            <th>Entry</th>
-                            <th>Stop Loss</th>
-                            <th>Exit</th>
-                            <th>Comm</th>
-                            <th>Exit Time</th>
-                            <th>Div</th>
-                            <th>Swap</th>
-                            <th>Profit</th>
-                            <th>System</th>
-                            <th>Strategy</th>
-                            <th>Asset Class</th>
-                            <th>Grade</th>
-                            <th>State</th>
-                            <th>Manage</th>
-                        </tr>
-                    </thead>
-                <tbody>
-                    {% for closedPosition in closedPositions %}
-                        <tr>
-                            <td>{{ closedPosition.getEntryTime().format('Y.m.d H:i') }}</td>
-                            <td>{{ closedPosition.symbol }}</td>
-                            <td>{{ closedPosition.type }}</td>
-                            <td>{{ closedPosition.volume }}</td>
-                            <td>{{ closedPosition.getEntryLevel }}</td>
-                            <td>{{ closedPosition.stopLoss }}</td>
-                            <td>{{ closedPosition.getExitLevel() }}</td>
-                            <td>{{ closedPosition.commission }}</td>
-                            <td>{{ closedPosition.getExitTime().format('Y.m.d H:i') }}</td>
+    <div class="overflow-x-auto">
+        <div class="table-container">
+            <h4 class="text-2xl font-semibold mb-2">Closed Positions</h4>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Entry Time</th>
+                    <th>Symbol</th>
+                    <th>Type</th>
+                    <th>Vol</th>
+                    <th>Entry</th>
+                    <th>Stop Loss</th>
+                    <th>Exit</th>
+                    <th>Comm</th>
+                    <th>Exit Time</th>
+                    <th>Div</th>
+                    <th>Swap</th>
+                    <th>Profit</th>
+                    <th>System</th>
+                    <th>Strategy</th>
+                    <th>Asset Class</th>
+                    <th>Grade</th>
+                    <th>State</th>
+                    <th>Manage</th>
+                </tr>
+                </thead>
+            <tbody>
+            {% for closedPosition in closedPositions %}
+                <tr>
+                    <td>{{ closedPosition.getEntryTime().format('Y.m.d H:i') }}</td>
+                    <td>{{ closedPosition.symbol }}</td>
+                    <td>{{ closedPosition.type }}</td>
+                    <td>{{ closedPosition.volume }}</td>
+                    <td>{{ closedPosition.getEntryLevel }}</td>
+                    <td>{{ closedPosition.stopLoss }}</td>
+                    <td>{{ closedPosition.getExitLevel() }}</td>
+                    <td>{{ closedPosition.commission }}</td>
+                    <td>{{ closedPosition.getExitTime().format('Y.m.d H:i') }}</td>
 
-                            <td>{{ closedPosition.dividend }}</td>
-                            <td>{{ closedPosition.swap }}</td>
-                            <td>{{ closedPosition.profit }}</td>
-                            <td>{{ closedPosition.system }}</td>
-                            <td>{{ closedPosition.strategy }}</td>
-                            <td>{{ closedPosition.assetClass }}</td>
-                            <td>{{ closedPosition.grade }}</td>
-                            <td>{{ closedPosition.state }}</td>
-                            <td>
-
-                                <button id="dropdownDefaultButton{{ closedPosition.getPositionId }}" data-dropdown-toggle="dropdown{{ closedPosition.getPositionId }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-lg-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Action<svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"></path>
+                    <td>{{ closedPosition.dividend }}</td>
+                    <td>{{ closedPosition.swap }}</td>
+                    <td>{{ closedPosition.profit }}</td>
+                    <td>{{ closedPosition.system }}</td>
+                    <td>{{ closedPosition.strategy }}</td>
+                    <td>{{ closedPosition.assetClass }}</td>
+                    <td>{{ closedPosition.grade }}</td>
+                    <td>{{ closedPosition.state }}</td>
+                    <td>
+                        <div class="dropdown relative inline-block" data-controller="dropdown">
+                            <button id="dropdownDefaultButton{{ closedPosition.getPositionId }}"
+                                    data-action="click->dropdown#toggle"
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 font-medium rounded-lg ext-sm
+                                    px-4 py-lg-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700"
+                                    type="button">
+                                Action
+                                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                     fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2" d="m1 1 4 4 4-4"></path>
                                 </svg>
-                                </button>
+                            </button>
 
-                                <!-- Dropdown menu -->
-                                <div id="dropdown{{ closedPosition.getPositionId }}" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton{{ closedPosition.getPositionId }}">
-                                        <li>
-                                            <a href="{{ path('app_position_timeline', {'positionId': closedPosition.getPositionId}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Timeline</a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_position_update', {'positionId': closedPosition.getPositionId, 'context': 'dashboard'}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update</a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_position_edit', {'positionId': closedPosition.getPositionId}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('app_position_delete', {'positionId': closedPosition.getPositionId}) }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete</a>
-                                        </li>
-                                    </ul>
-                                </div>
+                            <!-- Dropdown menu -->
+                            <div class="dropdown-content fixed mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg z-50"
+                                 data-dropdown-target="menu">
+                                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
+                                    aria-labelledby="dropdownDefaultButton{{ closedPosition.getPositionId }}">
+                                    <li>
+                                        <a href="{{ path('app_position_timeline', {'positionId': closedPosition.getPositionId}) }}"
+                                           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Timeline</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('app_position_update', {'positionId': closedPosition.getPositionId, 'context': 'dashboard'}) }}"
+                                           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Update</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('app_position_edit', {'positionId': closedPosition.getPositionId}) }}"
+                                           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ path('app_position_delete', {'positionId': closedPosition.getPositionId}) }}"
+                                           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
 
-                            </td>
-
-                        </tr>
-                    {% endfor %}
+                </tr>
+            {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 
-        <div class="overflow-x-auto">
-            <div class="table-container">
-                <h4 class="text-2xl font-semibold mt-8 mb-2">Open Positions</h4>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Entry Time</th>
-                                <th>Symbol</th>
-                                <th>Type</th>
-                                <th>Vol</th>
-                                <th>Entry</th>
-                                <th>Stop Loss</th>
-                                <th>Exit</th>
-                                <th>Comm</th>
-                                <th>Exit Time</th>
-                                <th>Div</th>
-                                <th>Swap</th>
-                                <th>Profit</th>
-                                <th>System</th>
-                                <th>Strategy</th>
-                                <th>Asset Class</th>
-                                <th>Grade</th>
-                                <th>State</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                    <tbody>
-                {% for position in openPositions %}
-                    <tr>
-                        <td>{{ position.EntryTime().format('Y.m.d H:i') }}</td>
-                        <td>{{ position.symbol }}</td>
-                        <td>{{ position.type }}</td>
-                        <td>{{ position.volume }}</td>
-                        <td>{{ position.entryLevel }}</td>
-                        <td>{{ position.stopLoss }}</td>
-                        <td>{{ position.exitLevel }}</td>
-                        <td>{{ position.commission }}</td>
-                        <td>{{ position.ExitTime()}}</td>
-                        <td>{{ position.dividend }}</td>
-                        <td>{{ position.swap }}</td>
-                        <td>{{ position.profit }}</td>
-                        <td>{{ position.system }}</td>
-                        <td>{{ position.strategy }}</td>
-                        <td>{{ position.assetClass }}</td>
-                        <td>{{ position.grade }}</td>
-                        <td>{{ position.state }}</td>
-                        <td>
-                            <a href="{{ path('app_position_update', {'positionId': position.positionId}) }}" class="btn btn-primary btn-sm">Update</a>
-                            <form action="{{ path('app_position_delete', {'positionId': position.getPositionId}) }}" method="post">
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+    <div class="overflow-x-auto">
+        <div class="table-container">
+            <h4 class="text-2xl font-semibold mt-8 mb-2">Open Positions</h4>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Entry Time</th>
+                    <th>Symbol</th>
+                    <th>Type</th>
+                    <th>Vol</th>
+                    <th>Entry</th>
+                    <th>Stop Loss</th>
+                    <th>Exit</th>
+                    <th>Comm</th>
+                    <th>Exit Time</th>
+                    <th>Div</th>
+                    <th>Swap</th>
+                    <th>Profit</th>
+                    <th>System</th>
+                    <th>Strategy</th>
+                    <th>Asset Class</th>
+                    <th>Grade</th>
+                    <th>State</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+            <tbody>
+            {% for position in openPositions %}
+                <tr>
+                    <td>{{ position.EntryTime().format('Y.m.d H:i') }}</td>
+                    <td>{{ position.symbol }}</td>
+                    <td>{{ position.type }}</td>
+                    <td>{{ position.volume }}</td>
+                    <td>{{ position.entryLevel }}</td>
+                    <td>{{ position.stopLoss }}</td>
+                    <td>{{ position.exitLevel }}</td>
+                    <td>{{ position.commission }}</td>
+                    <td>{{ position.ExitTime() }}</td>
+                    <td>{{ position.dividend }}</td>
+                    <td>{{ position.swap }}</td>
+                    <td>{{ position.profit }}</td>
+                    <td>{{ position.system }}</td>
+                    <td>{{ position.strategy }}</td>
+                    <td>{{ position.assetClass }}</td>
+                    <td>{{ position.grade }}</td>
+                    <td>{{ position.state }}</td>
+                    <td>
+                        <a href="{{ path('app_position_update', {'positionId': position.positionId}) }}"
+                           class="btn btn-primary btn-sm">Update</a>
+                        <form action="{{ path('app_position_delete', {'positionId': position.getPositionId}) }}"
+                              method="post">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
     </div>
 {% endblock %}

@@ -81,10 +81,12 @@ class Position
 
     public function getEntryLevel(): ?float
     {
+
         $combinedEntryLevel = 0;
         $combinedVolume = 0;
-        foreach ($this->getPositionStates() as $state){
 
+        foreach ($this->getPositionStates() as $state){
+//            dd($state->getState());
             if($state->getState() === PositionState::STATE_OPENED || $state->getState() === PositionState::STATE_SCALE_IN) {
                 $currentEntryLevel = $state->getPriceLevel() * $state->getVolume();
                 $combinedEntryLevel += $currentEntryLevel;
@@ -92,8 +94,8 @@ class Position
             }
 
         }
-        $exitLevel = $combinedEntryLevel / $combinedVolume;
-        return $this->formatLevel($exitLevel, $state);
+        $entryLevel = $combinedEntryLevel / $combinedVolume;
+        return $this->formatLevel($entryLevel, $state);
     }
     public function getExitLevel():?float
     {
